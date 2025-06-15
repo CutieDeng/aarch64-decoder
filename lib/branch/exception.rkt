@@ -103,3 +103,35 @@
 )
 
 (provide (struct-out BRK))
+
+(define int->HLT/struct int->BRK/struct)
+
+(define HLT-head BRK-head)
+
+(define (int->HLT i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) HLT-head)
+    (equal? (bitwise-bit-field i 21 24) #x2)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 0)
+    ) #f]
+    [else (apply HLT (int->HLT/struct i))])
+)
+
+(define (HLT->int b)
+  (match-define (HLT imm) b)
+  (bitwise-ior
+    (arithmetic-shift HLT-head 24)
+    (arithmetic-shift #x2 21)
+    (arithmetic-shift imm 5)
+  )
+)
+
+(struct HLT (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int HLT->int
+  #:property prop:try-from-int int->HLT
+)
+
+(provide (struct-out HLT))
