@@ -171,7 +171,7 @@
 (struct RET (rn)
   #:transparent
   #:property prop:in-feature #hash()
-  #:property prop:into-int BR->int
+  #:property prop:into-int RET->int
   #:property prop:try-from-int int->RET
 )
 
