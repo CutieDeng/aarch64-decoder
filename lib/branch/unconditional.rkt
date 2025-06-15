@@ -336,3 +336,43 @@
 )
 
 (provide (struct-out RETAASPPC))
+
+(define RETAASPPCR-head #x6b)
+
+(define (int->RETAASPPCR/struct i)
+  (list (bitwise-bit-field i 10 11) (bitwise-bit-field i 0 5))
+)
+
+(define (int->RETAASPPCR i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) RETAASPPCR-head)
+    (equal? (bitwise-bit-field i 21 25) #x2)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 11 16) 1)
+    (equal? (bitwise-bit-field i 5 10) #x1f)
+    (not (equal? (bitwise-bit-field i 0 5) #x1f))
+    ) #f]
+    [else (apply RETAASPPCR (int->RETAASPPCR/struct i))])
+)
+
+(define (RETAASPPCR->int r)
+  (match-define (RETAASPPCR m rm) r)
+  (bitwise-ior
+    (arithmetic-shift RETAASPPCR-head 25)
+    (arithmetic-shift #x2 21)
+    (arithmetic-shift #x1f 16)
+    (arithmetic-shift #x1 11)
+    (arithmetic-shift m 10)
+    (arithmetic-shift #x1f 5)
+    rm
+  )
+)
+
+(struct RETAASPPCR (m rm)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_PAuth_LR . #t))
+  #:property prop:into-int RETAASPPCR->int
+  #:property prop:try-from-int int->RETAASPPCR
+)
+
+(provide (struct-out RETAASPPCR))
