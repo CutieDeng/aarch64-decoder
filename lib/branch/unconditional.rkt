@@ -102,3 +102,42 @@
 )
 
 (provide (struct-out BLR))
+
+(define (int->BR/struct i)
+  (list (bitwise-bit-field i 5 10))
+)
+
+(define BR-head BLR-head)
+
+(define (int->BR i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) BR-head)
+    (equal? (bitwise-bit-field i 24 25) 0)
+    (equal? (bitwise-bit-field i 23 24) 0)
+    (equal? (bitwise-bit-field i 21 23) 0)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 12 16) 0)
+    (equal? (bitwise-bit-field i 11 12) 0)
+    (equal? (bitwise-bit-field i 10 11) 0)
+    (equal? (bitwise-bit-field i 0 5) 0)
+    ) #f]
+    [else (apply BR (int->BR/struct i))])
+)
+
+(define (BR->int br)
+  (match-define (BR rn) br)
+  (bitwise-ior
+    (arithmetic-shift BR-head 25)
+    (arithmetic-shift #x1f 16)
+    (arithmetic-shift rn 5)
+  )
+)
+
+(struct BR (rn)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int BR->int
+  #:property prop:try-from-int int->BR
+)
+
+(provide (struct-out BR))
