@@ -135,3 +135,35 @@
 )
 
 (provide (struct-out HLT))
+
+(define int->HVC/struct int->BRK/struct)
+
+(define HVC-head BRK-head)
+
+(define (int->HVC i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) HVC-head)
+    (equal? (bitwise-bit-field i 21 24) #x0)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 2)
+    ) #f]
+    [else (apply HVC (int->HVC/struct i))])
+)
+
+(define (HVC->int b)
+  (match-define (HVC imm) b)
+  (bitwise-ior
+    (arithmetic-shift HVC-head 24)
+    (arithmetic-shift imm 5)
+    #x2
+  )
+)
+
+(struct HVC (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int HVC->int
+  #:property prop:try-from-int int->HVC
+)
+
+(provide (struct-out HVC))
