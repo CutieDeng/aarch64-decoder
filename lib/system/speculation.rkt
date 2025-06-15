@@ -77,7 +77,7 @@
 
 (struct PSB ()
   #:transparent
-  #:property prop:in-feature #hash((FEAT_RAS . #t))
+  #:property prop:in-feature #hash((FEAT_SPE . #t))
   #:property prop:into-int PSB->int
   #:property prop:try-from-int int->PSB
 )
