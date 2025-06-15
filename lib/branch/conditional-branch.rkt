@@ -40,6 +40,7 @@
 )
 
 (struct B.cond (imm19 cond)
+  #:transparent
   #:property prop:into-int B.cond->int
   #:property prop:try-from-int int->B.cond
   #:property prop:in-feature #hash())
@@ -47,6 +48,7 @@
 (provide (struct-out B.cond))
 
 (struct BC.cond (imm19 cond)
+  #:transparent
   #:property prop:into-int BC.cond->int
   #:property prop:try-from-int int->BC.cond
   #:property prop:in-feature #hash((FEAT_HBC . #t)))
