@@ -36,3 +36,29 @@
 )
 
 (provide (struct-out WFET))
+
+(define WFI-literal (bitwise-ior
+  (arithmetic-shift #x354 22)
+  (arithmetic-shift #x3 16)
+  (arithmetic-shift #x2 12)
+  (arithmetic-shift #x3 5)
+  #x1f
+))
+
+(define (int->WFI i)
+  (cond [(nand (equal? i WFI-literal)) #f]
+    [else (WFI)])
+)
+
+(define (WFI->int _w)
+  WFI-literal
+)
+
+(struct WFI ()
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int WFI->int
+  #:property prop:try-from-int int->WFI
+)
+
+(provide (struct-out WFI))
