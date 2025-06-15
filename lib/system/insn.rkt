@@ -86,3 +86,37 @@
 )
 
 (provide (struct-out SYSL))
+
+(define SYSP-head #x355)
+
+(define int->SYSP/struct int->SYS/struct)
+
+(define (int->SYSP i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 22 32) SYSP-head)
+    (equal? (bitwise-bit-field i 19 21) #x1)
+    ) #f]
+    [else (apply SYSP (int->SYSP/struct i))])
+)
+
+(define (SYSP->int e)
+  (match-define (SYSP op1 crn crm op2 rt) e)
+  (bitwise-ior
+    (arithmetic-shift SYSP-head 22)
+    (arithmetic-shift #x1 19)
+    (arithmetic-shift op1 16)
+    (arithmetic-shift crn 12)
+    (arithmetic-shift crm 8)
+    (arithmetic-shift op2 5)
+    rt
+  )
+)
+
+(struct SYSP (op1 crn crm op2 rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_SYSINSTR128 . #t))
+  #:property prop:into-int SYSP->int
+  #:property prop:try-from-int int->SYSP
+)
+
+(provide (struct-out SYSP))
