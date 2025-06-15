@@ -139,3 +139,31 @@
 )
 
 (provide (struct-out SEV))
+
+(define SEVL-head NOP-head)
+
+(define SEVL-literal (bitwise-ior
+  (arithmetic-shift SEVL-head 22)
+  (arithmetic-shift #x3 16)
+  (arithmetic-shift #x2 12)
+  (arithmetic-shift #x5 5)
+  #x1f
+))
+
+(define (int->SEVL i)
+  (cond [(nand (equal? i SEVL-literal)) #f]
+    [else (SEVL)])
+)
+
+(define (SEVL->int _w)
+  SEVL-literal
+)
+
+(struct SEVL ()
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int SEVL->int
+  #:property prop:try-from-int int->SEVL
+)
+
+(provide (struct-out SEVL))
