@@ -167,3 +167,41 @@
 )
 
 (provide (struct-out SEVL))
+
+(define HINT-head NOP-head)
+
+(define (int->HINT/struct i)
+  (list (bitwise-bit-field i 8 12) (bitwise-bit-field i 5 8))
+)
+
+(define (int->HINT i)
+  (cond [(nand (equal? (bitwise-bit-field i 22 32) HINT-head)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 19 21) 0)
+    (equal? (bitwise-bit-field i 16 19) #x3)
+    (equal? (bitwise-bit-field i 12 16) #x2)
+    (equal? (bitwise-bit-field i 0 5) #x1f)
+    ) #f]
+    [else (apply HINT (int->HINT/struct i))])
+)
+
+(define (HINT->int h)
+  (match-define (HINT crm op2) h)
+  (bitwise-ior
+    (arithmetic-shift HINT-head 22)
+    (arithmetic-shift #x3 16)
+    (arithmetic-shift #x2 12)
+    (arithmetic-shift crm 8)
+    (arithmetic-shift op2 5)
+    #x1f
+  )
+)
+
+(struct HINT (crm op2)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int HINT->int
+  #:property prop:try-from-int int->HINT
+)
+
+(provide (struct-out HINT))
