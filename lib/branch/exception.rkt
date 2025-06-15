@@ -4,8 +4,10 @@
 (require "../util/into-int.rkt")
 (require "../util/try-from-int.rkt")
 
+(define ERET-head #x6b)
+
 (define ERET-literal (bitwise-ior
-  (arithmetic-shift #x6b 25)
+  (arithmetic-shift ERET-head 25)
   (arithmetic-shift #x4 21)
   (arithmetic-shift #x1f 16)
   (arithmetic-shift #x1f 5)
@@ -330,3 +332,30 @@
 )
 
 (provide (struct-out DCPS3))
+
+(define DRPS-head ERET-head)
+
+(define DRPS-literal (bitwise-ior
+  (arithmetic-shift DRPS-head 25)
+  (arithmetic-shift #x5 21)
+  (arithmetic-shift #x1f 16)
+  (arithmetic-shift #x1f 5)
+))
+
+(define (int->DRPS i)
+  (cond [(nand (equal? i DRPS-literal)) #f]
+    [else (DRPS)])
+)
+
+(define (DRPS->int _e)
+  DRPS-literal
+)
+
+(struct DRPS ()
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int DRPS->int
+  #:property prop:try-from-int int->DRPS
+)
+
+(provide (struct-out DRPS))
