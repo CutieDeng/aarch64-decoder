@@ -56,3 +56,30 @@
 )
 
 (provide (struct-out ESB))
+
+(define PSB-head CSDB-head)
+
+(define PSB-literal (bitwise-ior
+  (arithmetic-shift PSB-head 12)
+  (arithmetic-shift #x2 8)
+  (arithmetic-shift #x1 5)
+  #x1f
+))
+
+(define (int->PSB i)
+  (cond [(nand (equal? i PSB-literal)) #f]
+    [else (PSB)])
+)
+
+(define (PSB->int _cs)
+  PSB-literal
+)
+
+(struct PSB ()
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_RAS . #t))
+  #:property prop:into-int PSB->int
+  #:property prop:try-from-int int->PSB
+)
+
+(provide (struct-out PSB))
