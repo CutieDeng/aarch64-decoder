@@ -103,9 +103,7 @@
 
 (provide (struct-out BLR))
 
-(define (int->BR/struct i)
-  (list (bitwise-bit-field i 5 10))
-)
+(define int->BR/struct int->BLR/struct)
 
 (define BR-head BLR-head)
 
@@ -141,3 +139,40 @@
 )
 
 (provide (struct-out BR))
+
+(define int->RET/struct int->BR/struct)
+(define RET-head BR-head)
+
+(define (int->RET i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) RET-head)
+    (equal? (bitwise-bit-field i 24 25) 0)
+    (equal? (bitwise-bit-field i 23 24) 0)
+    (equal? (bitwise-bit-field i 21 23) #x2)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 12 16) 0)
+    (equal? (bitwise-bit-field i 11 12) 0)
+    (equal? (bitwise-bit-field i 10 11) 0)
+    (equal? (bitwise-bit-field i 0 5) 0)
+    ) #f]
+    [else (apply RET (int->RET/struct i))])
+)
+
+(define (RET->int r)
+  (match-define (RET rn) r)
+  (bitwise-ior
+    (arithmetic-shift RET-head 25)
+    (arithmetic-shift #x2 21)
+    (arithmetic-shift #x1f 16)
+    (arithmetic-shift rn 5)
+  )
+)
+
+(struct RET (rn)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int BR->int
+  #:property prop:try-from-int int->RET
+)
+
+(provide (struct-out RET))
