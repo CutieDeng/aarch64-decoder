@@ -30,3 +30,29 @@
 )
 
 (provide (struct-out CSDB))
+
+(define ESB-head CSDB-head)
+
+(define ESB-literal (bitwise-ior
+  (arithmetic-shift ESB-head 12)
+  (arithmetic-shift #x2 8)
+  #x1f
+))
+
+(define (int->ESB i)
+  (cond [(nand (equal? i ESB-literal)) #f]
+    [else (ESB)])
+)
+
+(define (ESB->int _cs)
+  ESB-literal
+)
+
+(struct ESB ()
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_RAS . #t))
+  #:property prop:into-int ESB->int
+  #:property prop:try-from-int int->ESB
+)
+
+(provide (struct-out ESB))
