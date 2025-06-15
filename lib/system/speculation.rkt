@@ -83,3 +83,30 @@
 )
 
 (provide (struct-out PSB))
+
+(define SB-head CSDB-head)
+
+(define SB-literal (bitwise-ior
+  (arithmetic-shift SB-head 12)
+  (arithmetic-shift #x2 8)
+  (arithmetic-shift #x1 5)
+  #x1f
+))
+
+(define (int->SB i)
+  (cond [(nand (equal? i SB-literal)) #f]
+    [else (SB)])
+)
+
+(define (SB->int _cs)
+  SB-literal
+)
+
+(struct SB ()
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_SB . #t))
+  #:property prop:into-int SB->int
+  #:property prop:try-from-int int->SB
+)
+
+(provide (struct-out SB))
