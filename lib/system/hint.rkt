@@ -56,3 +56,30 @@
 )
 
 (provide (struct-out YIELD))
+
+(define WFE-head NOP-head)
+
+(define WFE-literal (bitwise-ior
+  (arithmetic-shift WFE-head 22)
+  (arithmetic-shift #x3 16)
+  (arithmetic-shift #x2 12)
+  (arithmetic-shift #x2 5)
+  #x1f
+))
+
+(define (int->WFE i)
+  (cond [(nand (equal? i WFE-literal)) #f]
+    [else (WFE)])
+)
+
+(define (WFE->int _nop)
+  WFE-literal)
+
+(struct WFE ()
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int WFE->int
+  #:property prop:try-from-int int->WFE
+)
+
+(provide (struct-out WFE))
