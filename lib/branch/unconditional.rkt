@@ -296,7 +296,7 @@
 
 (struct RETAA (m)
   #:transparent
-  #:property prop:in-feature #hash()
+  #:property prop:in-feature #hash((FEAT_PAuth . #t))
   #:property prop:into-int RETAA->int
   #:property prop:try-from-int int->RETAA
 )
