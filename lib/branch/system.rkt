@@ -84,3 +84,43 @@
 )
 
 (provide (struct-out MSR/r))
+
+(define (int->MSR/pstate/struct i)
+  (list (bitwise-bit-field i 16 19)
+    (bitwise-bit-field i 8 12)
+    (bitwise-bit-field i 5 8))
+)
+
+(define MSR/pstate-head MRS-head)
+
+(define (int->MSR/pstate i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 22 32) MSR/pstate-head)
+    (equal? (bitwise-bit-field i 21 22) #x0)
+    (equal? (bitwise-bit-field i 19 21) #x0)
+    (equal? (bitwise-bit-field i 12 16) #x4)
+    (equal? (bitwise-bit-field i 0 5) #x1f)
+    ) #f]
+    [else (apply MSR/pstate (int->MSR/pstate/struct i))])
+)
+
+(define (MSR/pstate->int e)
+  (match-define (MSR/pstate op1 crm op2) e)
+  (bitwise-ior
+    (arithmetic-shift MSR/pstate-head 22)
+    (arithmetic-shift op1 16)
+    (arithmetic-shift #x4 12)
+    (arithmetic-shift crm 8)
+    (arithmetic-shift op2 5)
+    #x1f
+  )
+)
+
+(struct MSR/pstate (op1 crm op2)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int MSR/pstate->int
+  #:property prop:try-from-int int->MSR/pstate
+)
+
+(provide (struct-out MSR/pstate))
