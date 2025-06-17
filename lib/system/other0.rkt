@@ -62,3 +62,37 @@
 )
 
 (provide (struct-out WFI))
+
+(define WFIT-head #xd5031)
+
+(define (int->WFIT/struct i)
+  (list (bitwise-bit-field i 0 5)
+    )
+)
+
+(define (int->WFIT i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 12 32) WFIT-head)
+    (equal? (bitwise-bit-field i 8 12) #x0)
+    (equal? (bitwise-bit-field i 5 8) #x1)
+    ) #f]
+    [else (apply WFIT (int->WFIT/struct i))])
+)
+
+(define (WFIT->int e)
+  (match-define (WFIT rd) e)
+  (bitwise-ior
+    (arithmetic-shift WFIT-head 12)
+    (arithmetic-shift #x1 5)
+    rd
+  )
+)
+
+(struct WFIT (rd)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_WFxT . #t))
+  #:property prop:into-int WFIT->int
+  #:property prop:try-from-int int->WFIT
+)
+
+(provide (struct-out WFIT))
