@@ -56,8 +56,8 @@
   )
 )
 
-(define (cbz->int cbnz)
-  (match-define (CBNZ sf imm19 rt) cbnz)
+(define (cbz->int cbz)
+  (match-define (CBZ sf imm19 rt) cbz)
   (bitwise-ior
     (arithmetic-shift sf 31)
     (arithmetic-shift CBNZ-head 25)
