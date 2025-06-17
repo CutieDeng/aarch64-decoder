@@ -59,3 +59,44 @@
 )
 
 (provide (struct-out BL))
+
+(struct BLR (rn)
+  #:property prop:in-feature #hash()
+  #:property prop:into-int BLR->int
+  #:property prop:try-from-int int->BLR
+)
+
+(define (int->BLR i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) BLR-head)
+    (equal? (bitwise-bit-field i 24 25) 0)
+    (equal? (bitwise-bit-field i 23 24) 0)
+    (equal? (bitwise-bit-field i 21 23) 1)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 12 16) 0)
+    (equal? (bitwise-bit-field i 11 12) 0)
+    (equal? (bitwise-bit-field i 10 11) 0)
+    (equal? (bitwise-bit-field i 0 5) 0)
+    ) #f]
+    [else (apply BLR (int->BLR/struct i))]
+  )
+)
+
+(define BLR-head #x6b)
+
+(define (int->BLR/struct i)
+  (define rn (bitwise-bit-field i 5 10))
+  (list rn)
+)
+
+(define (BLR->int blr)
+  (match-define (BLR rn) blr)
+  (bitwise-ior
+    (arithmetic-shift BLR-head 25)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift #x1f 16)
+    (arithmetic-shift rn 5)
+  )
+)
+
+(provide (struct-out BLR))
