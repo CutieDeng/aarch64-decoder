@@ -221,3 +221,41 @@
 )
 
 (provide (struct-out BLRAA))
+
+(define int->BRAA/struct int->BLRAA/struct)
+
+(define BRAA-head BLR-head)
+
+(define (int->BRAA i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 25 32) BRAA-head)
+    (equal? (bitwise-bit-field i 23 24) 0)
+    (equal? (bitwise-bit-field i 21 23) 0)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 12 16) 0)
+    (equal? (bitwise-bit-field i 11 12) 1)
+    ) #f]
+    [else (apply BRAA (int->BRAA/struct i))])
+)
+
+(define (BRAA->int braa)
+  (match-define (BRAA z m rn rm) braa)
+  (bitwise-ior
+    (arithmetic-shift BRAA-head 25)
+    (arithmetic-shift z 24)
+    (arithmetic-shift #x1f 16)
+    (arithmetic-shift 1 11)
+    (arithmetic-shift m 10)
+    (arithmetic-shift rn 5)
+    rm
+  )
+)
+
+(struct BRAA (z m rn rm)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_Pauth . #t))
+  #:property prop:into-int BRAA->int
+  #:property prop:try-from-int int->BRAA
+)
+
+(provide (struct-out BRAA))
