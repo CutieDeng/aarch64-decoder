@@ -199,3 +199,35 @@
 )
 
 (provide (struct-out SMC))
+
+(define int->SVC/struct int->BRK/struct)
+
+(define SVC-head BRK-head)
+
+(define (int->SVC i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) SVC-head)
+    (equal? (bitwise-bit-field i 21 24) #x0)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 1)
+    ) #f]
+    [else (apply SVC (int->SVC/struct i))])
+)
+
+(define (SVC->int b)
+  (match-define (SVC imm) b)
+  (bitwise-ior
+    (arithmetic-shift SVC-head 24)
+    (arithmetic-shift imm 5)
+    #x1
+  )
+)
+
+(struct SVC (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int SVC->int
+  #:property prop:try-from-int int->SVC
+)
+
+(provide (struct-out SVC))
