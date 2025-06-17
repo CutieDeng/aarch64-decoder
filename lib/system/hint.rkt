@@ -111,3 +111,31 @@
 )
 
 (provide (struct-out WFI))
+
+(define SEV-head NOP-head)
+
+(define SEV-literal (bitwise-ior
+  (arithmetic-shift SEV-head 22)
+  (arithmetic-shift #x3 16)
+  (arithmetic-shift #x2 12)
+  (arithmetic-shift #x4 5)
+  #x1f
+))
+
+(define (int->SEV i)
+  (cond [(nand (equal? i SEV-literal)) #f]
+    [else (SEV)])
+)
+
+(define (SEV->int _w)
+  SEV-literal
+)
+
+(struct SEV ()
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int SEV->int
+  #:property prop:try-from-int int->SEV
+)
+
+(provide (struct-out SEV))
