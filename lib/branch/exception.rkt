@@ -231,3 +231,102 @@
 )
 
 (provide (struct-out SVC))
+
+(define int->DCPS1/struct int->BRK/struct)
+
+(define DCPS1-head BRK-head)
+
+(define (int->DCPS1 i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) DCPS1-head)
+    (equal? (bitwise-bit-field i 21 24) #x5)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 1)
+    ) #f]
+    [else (apply DCPS1 (int->DCPS1/struct i))])
+)
+
+(define (DCPS1->int b)
+  (match-define (DCPS1 imm) b)
+  (bitwise-ior
+    (arithmetic-shift DCPS1-head 24)
+    (arithmetic-shift #x5 21)
+    (arithmetic-shift imm 5)
+    #x1
+  )
+)
+
+(struct DCPS1 (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int DCPS1->int
+  #:property prop:try-from-int int->DCPS1
+)
+
+(provide (struct-out DCPS1))
+
+(define int->DCPS2/struct int->BRK/struct)
+
+(define DCPS2-head BRK-head)
+
+(define (int->DCPS2 i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) DCPS2-head)
+    (equal? (bitwise-bit-field i 21 24) #x5)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 2)
+    ) #f]
+    [else (apply DCPS2 (int->DCPS2/struct i))])
+)
+
+(define (DCPS2->int b)
+  (match-define (DCPS2 imm) b)
+  (bitwise-ior
+    (arithmetic-shift DCPS2-head 24)
+    (arithmetic-shift #x5 21)
+    (arithmetic-shift imm 5)
+    #x2
+  )
+)
+
+(struct DCPS2 (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int DCPS2->int
+  #:property prop:try-from-int int->DCPS2
+)
+
+(provide (struct-out DCPS2))
+
+(define int->DCPS3/struct int->BRK/struct)
+
+(define DCPS3-head BRK-head)
+
+(define (int->DCPS3 i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) DCPS3-head)
+    (equal? (bitwise-bit-field i 21 24) #x5)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 3)
+    ) #f]
+    [else (apply DCPS3 (int->DCPS3/struct i))])
+)
+
+(define (DCPS3->int b)
+  (match-define (DCPS3 imm) b)
+  (bitwise-ior
+    (arithmetic-shift DCPS3-head 24)
+    (arithmetic-shift #x5 21)
+    (arithmetic-shift imm 5)
+    #x3
+  )
+)
+
+(struct DCPS3 (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int DCPS3->int
+  #:property prop:try-from-int int->DCPS3
+)
+
+(provide (struct-out DCPS3))
