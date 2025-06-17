@@ -176,3 +176,48 @@
 )
 
 (provide (struct-out RET))
+
+(define (int->BLRAA/struct i)
+  (define z (bitwise-bit-field i 24 25))
+  (define m (bitwise-bit-field i 10 11))
+  (define rn (bitwise-bit-field i 5 10))
+  (define rm (bitwise-bit-field i 0 5))
+  (list z m rn rm)
+)
+
+(define BLRAA-head BLR-head)
+
+(define (int->BLRAA i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) BLRAA-head)
+    (equal? (bitwise-bit-field i 23 24) 0)
+    (equal? (bitwise-bit-field i 21 23) 1)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 12 16) 0)
+    (equal? (bitwise-bit-field i 11 12) 1)
+    ) #f]
+    [else (apply BLRAA (int->BLRAA/struct i))])
+)
+
+(define (BLRAA->int i)
+  (match-define (BLRAA z m rn rm) i)
+  (bitwise-ior
+    (arithmetic-shift BLRAA-head 25)
+    (arithmetic-shift z 24)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift #x1f 16)
+    (arithmetic-shift 1 11)
+    (arithmetic-shift m 10)
+    (arithmetic-shift rn 5)
+    rm
+  )
+)
+
+(struct BLRAA (z m rn rm)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_Pauth . #t))
+  #:property prop:into-int BLRAA->int
+  #:property prop:try-from-int int->BLRAA
+)
+
+(provide (struct-out BLRAA))
