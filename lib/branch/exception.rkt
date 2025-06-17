@@ -69,3 +69,37 @@
 )
 
 (provide (struct-out ERETAA))
+
+(define (int->BRK/struct i)
+  (list (bitwise-bit-field i 5 21))
+)
+
+(define BRK-head #xd4)
+
+(define (int->BRK i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) BRK-head)
+    (equal? (bitwise-bit-field i 21 24) #x1)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 0)
+    ) #f]
+    [else (apply BRK (int->BRK/struct i))])
+)
+
+(define (BRK->int b)
+  (match-define (BRK imm) b)
+  (bitwise-ior
+    (arithmetic-shift BRK-head 24)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift imm 5)
+  )
+)
+
+(struct BRK (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int BRK->int
+  #:property prop:try-from-int int->BRK
+)
+
+(provide (struct-out BRK))
