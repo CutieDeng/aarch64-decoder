@@ -4,18 +4,11 @@
 (require "../util/into-int.rkt")
 (require "../util/try-from-int.rkt")
 
-(struct B (imm26)
-  #:property prop:in-feature #hash()
-  #:property prop:into-int B->int
-  #:property prop:try-from-int int->B
-)
-
 (define B-head #x01)
 
 (define (int->B/struct i)
   (list (bitwise-bit-field i 0 26))
 )
-
 
 (define (int->B i)
   (cond [(not (and (equal? (bitwise-bit-field i 26 31) B-head) (equal? (bitwise-bit-field i 31 32) 0))) #f]
@@ -33,13 +26,14 @@
   )
 )
 
-(provide (struct-out B))
-
-(struct BL (imm26)
+(struct B (imm26)
+  #:transparent
   #:property prop:in-feature #hash()
-  #:property prop:into-int BL->int
-  #:property prop:try-from-int int->BL
+  #:property prop:into-int B->int
+  #:property prop:try-from-int int->B
 )
+
+(provide (struct-out B))
 
 (define (int->BL i)
   (cond [(not (and (equal? (bitwise-bit-field i 26 31) B-head) (equal? (bitwise-bit-field i 31 32) 1))) #f]
@@ -58,13 +52,14 @@
   )
 )
 
-(provide (struct-out BL))
-
-(struct BLR (rn)
+(struct BL (imm26)
+  #:transparent
   #:property prop:in-feature #hash()
-  #:property prop:into-int BLR->int
-  #:property prop:try-from-int int->BLR
+  #:property prop:into-int BL->int
+  #:property prop:try-from-int int->BL
 )
+
+(provide (struct-out BL))
 
 (define (int->BLR i)
   (cond [(nand 
@@ -97,6 +92,13 @@
     (arithmetic-shift #x1f 16)
     (arithmetic-shift rn 5)
   )
+)
+
+(struct BLR (rn)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int BLR->int
+  #:property prop:try-from-int int->BLR
 )
 
 (provide (struct-out BLR))

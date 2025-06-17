@@ -5,6 +5,7 @@
 (require "../util/try-from-int.rkt")
 
 (struct CBNZ (sf imm19 rt)
+  #:transparent
   #:property prop:in-feature #hash()
   #:property prop:into-int cbnz->int
   #:property prop:try-from-int int->cbnz
@@ -42,6 +43,7 @@
 (provide (struct-out CBNZ))
 
 (struct CBZ (sf imm19 rt)
+  #:transparent
   #:property prop:in-feature #hash()
   #:property prop:into-int cbz->int
   #:property prop:try-from-int int->cbz
