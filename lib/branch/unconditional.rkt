@@ -315,7 +315,7 @@
     (equal? (bitwise-bit-field i 22 24) 0)
     (equal? (bitwise-bit-field i 0 5) #x1f)
     ) #f]
-    [else (apply RETAASPPC (int->RETAA/struct i))])
+    [else (apply RETAASPPC (int->RETAASPPC/struct i))])
 )
 
 (define (RETAASPPC->int r)
