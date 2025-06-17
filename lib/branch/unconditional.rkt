@@ -259,3 +259,46 @@
 )
 
 (provide (struct-out BRAA))
+
+(define RETAA-head BR-head)
+
+(define (int->RETAA/struct i)
+  (list (bitwise-bit-field i 10 11))
+)
+
+(define (int->RETAA i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) RETAA-head)
+    (equal? (bitwise-bit-field i 24 25) 0)
+    (equal? (bitwise-bit-field i 23 24) 0)
+    (equal? (bitwise-bit-field i 21 23) #x2)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 12 16) 0)
+    (equal? (bitwise-bit-field i 11 12) 1)
+    (equal? (bitwise-bit-field i 5 10) #x1f)
+    (equal? (bitwise-bit-field i 0 5) #x1f)
+    ) #f]
+    [else (apply RETAA (int->RETAA/struct i))])
+)
+
+(define (RETAA->int r)
+  (match-define (RETAA m) r)
+  (bitwise-ior
+    (arithmetic-shift RETAA-head 25)
+    (arithmetic-shift #x2 21)
+    (arithmetic-shift #x1f 16)
+    (arithmetic-shift 1 11)
+    (arithmetic-shift m 10)
+    (arithmetic-shift #x1f 5)
+    #x1f
+  )
+)
+
+(struct RETAA (m)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int RETAA->int
+  #:property prop:try-from-int int->RETAA
+)
+
+(provide (struct-out RETAA))
