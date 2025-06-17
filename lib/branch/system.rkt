@@ -124,3 +124,40 @@
 )
 
 (provide (struct-out MSR/pstate))
+
+(define int->MRRS/struct int->MRS/struct)
+
+(define MRRS-head #x355)
+
+(define (int->MRRS i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 22 32) MRRS-head)
+    (equal? (bitwise-bit-field i 21 22) #x1)
+    (equal? (bitwise-bit-field i 20 21) #x1)
+    ) #f]
+    [else (apply MRRS (int->MRRS/struct i))])
+)
+
+(define (MRRS->int e)
+  (match-define (MRRS o0 op1 crn crm op2 rt) e)
+  (bitwise-ior
+    (arithmetic-shift MRRS-head 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift #x1 20)
+    (arithmetic-shift o0 19)
+    (arithmetic-shift op1 16)
+    (arithmetic-shift crn 12)
+    (arithmetic-shift crm 8)
+    (arithmetic-shift op2 5)
+    rt
+  )
+)
+
+(struct MRRS (o0 op1 crn crm op2 rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_SYSREG128 . #t))
+  #:property prop:into-int MRRS->int
+  #:property prop:try-from-int int->MRRS
+)
+
+(provide (struct-out MRRS))
