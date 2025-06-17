@@ -167,3 +167,35 @@
 )
 
 (provide (struct-out HVC))
+
+(define int->SMC/struct int->BRK/struct)
+
+(define SMC-head BRK-head)
+
+(define (int->SMC i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) SMC-head)
+    (equal? (bitwise-bit-field i 21 24) #x0)
+    (equal? (bitwise-bit-field i 2 5) 0)
+    (equal? (bitwise-bit-field i 0 2) 3)
+    ) #f]
+    [else (apply SMC (int->SMC/struct i))])
+)
+
+(define (SMC->int b)
+  (match-define (SMC imm) b)
+  (bitwise-ior
+    (arithmetic-shift SMC-head 24)
+    (arithmetic-shift imm 5)
+    #x3
+  )
+)
+
+(struct SMC (imm16)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int SMC->int
+  #:property prop:try-from-int int->SMC
+)
+
+(provide (struct-out SMC))
