@@ -8,10 +8,11 @@
 (define B.cond.header #x54)
 
 (define (B.cond->int b)
+  (match-define (B.cond imm19 c) b)
   (bitwise-ior
     (arithmetic-shift B.cond.header 24)
-    (arithmetic-shift (B.cond-imm19 b) 5)
-    (cond->i4 (B.cond-cond b))
+    (arithmetic-shift imm19 5)
+    c
   )
 )
 
@@ -22,7 +23,7 @@
     (define subv (bitwise-bit-field i 4 5))
     (cond [(not (equal? subv 0)) #f]
     [else
-      (int->B.cond/private i)
+      (apply B.cond (int->B.cond/struct i))
     ])
   ])
 )
@@ -30,13 +31,7 @@
 (define (int->B.cond/struct i)
   (define imm19 (bitwise-bit-field i 5 24))
   (define c (bitwise-bit-field i 0 4))
-  (define c^ (i4->cond c))
-  (values imm19 c^)
-)
-
-(define (int->B.cond/private i)
-  (define-values (i c) (int->B.cond/struct i))
-  (B.cond i c)
+  (list imm19 c)
 )
 
 (struct B.cond (imm19 cond)
@@ -69,14 +64,9 @@
     (define subv (bitwise-bit-field i 4 5))
     (cond [(not (equal? subv 1)) #f]
     [else
-      (int->BC.cond/private i)
+      (apply BC.cond (int->B.cond/struct i))
     ])
   ])
-)
-
-(define (int->BC.cond/private i)
-  (define-values (imm c) (int->B.cond/struct i))
-  (BC.cond imm c)
 )
 
 (provide (struct-out BC.cond))
