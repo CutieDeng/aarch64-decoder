@@ -110,3 +110,30 @@
 )
 
 (provide (struct-out SB))
+
+(define TSB-head CSDB-head)
+
+(define TSB-literal (bitwise-ior
+  (arithmetic-shift TSB-head 12)
+  (arithmetic-shift #x2 8)
+  (arithmetic-shift #x2 5)
+  #x1f
+))
+
+(define (int->TSB i)
+  (cond [(nand (equal? i TSB-literal)) #f]
+    [else (TSB)])
+)
+
+(define (TSB->int _cs)
+  TSB-literal
+)
+
+(struct TSB ()
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_TRF . #t))
+  #:property prop:into-int TSB->int
+  #:property prop:try-from-int int->TSB
+)
+
+(provide (struct-out TSB))
