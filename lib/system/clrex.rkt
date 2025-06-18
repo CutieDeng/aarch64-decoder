@@ -69,3 +69,35 @@
 )
 
 (provide (struct-out DMB))
+
+(define DSB-head CLREX-head)
+
+(define int->DSB/struct int->CLREX/struct)
+
+(define (int->DSB i)
+  (cond [(nand (equal? (bitwise-bit-field i 12 32) DSB-head)
+    (equal? (bitwise-bit-field i 7 8) #x1)
+    (equal? (bitwise-bit-field i 5 7) #x0)
+    (equal? (bitwise-bit-field i 0 5) #x1f))
+    #f]
+    [else (apply DSB (int->DSB/struct i))])
+)
+
+(define (DSB->int cl)
+  (match-define (DSB crm) cl)
+  (bitwise-ior
+    (arithmetic-shift DSB-head 12)
+    (arithmetic-shift crm 8)
+    (arithmetic-shift #x1 7)
+    #x1f
+  )
+)
+
+(struct DSB (crm)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int DSB->int
+  #:property prop:try-from-int int->DSB
+)
+
+(provide (struct-out DSB))
