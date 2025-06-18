@@ -84,12 +84,12 @@
 
 (provide (struct-out PSB))
 
-(define SB-head CSDB-head)
+(define SB-head #xd5033)
 
 (define SB-literal (bitwise-ior
   (arithmetic-shift SB-head 12)
-  (arithmetic-shift #x2 8)
-  (arithmetic-shift #x1 5)
+  (arithmetic-shift #x1 7)
+  (arithmetic-shift #x3 5)
   #x1f
 ))
 
