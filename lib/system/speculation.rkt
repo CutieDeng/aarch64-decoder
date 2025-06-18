@@ -137,3 +137,30 @@
 )
 
 (provide (struct-out TSB))
+
+(define GCSB-head CSDB-head)
+
+(define GCSB-literal (bitwise-ior
+  (arithmetic-shift GCSB-head 12)
+  (arithmetic-shift #x2 8)
+  (arithmetic-shift #x3 5)
+  #x1f
+))
+
+(define (int->GCSB i)
+  (cond [(nand (equal? i GCSB-literal)) #f]
+    [else (GCSB)])
+)
+
+(define (GCSB->int _cs)
+  GCSB-literal
+)
+
+(struct GCSB ()
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_GCS . #t))
+  #:property prop:into-int GCSB->int
+  #:property prop:try-from-int int->GCSB
+)
+
+(provide (struct-out GCSB))
