@@ -105,3 +105,40 @@
 )
 
 (provide (struct-out LDR/i/Post))
+
+(define int->LDR/i/Pre/struct int->LDR/i/Post/struct)
+
+(define (int->LDR/i/Pre i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 24) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) #x3)
+  ) #f]
+  [else (apply LDR/i/Pre (int->LDR/i/Pre/struct i))])
+)
+
+(define (LDR/i/Pre->int l)
+  (match-define (LDR/i/Pre size vr opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift vr 26)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x3 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDR/i/Pre (size vr opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDR/i/Pre->int
+  #:property prop:try-from-int int->LDR/i/Pre
+)
+
+(provide (struct-out LDR/i/Pre))
