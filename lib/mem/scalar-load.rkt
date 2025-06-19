@@ -272,3 +272,28 @@
 )
 
 (provide (struct-out LDRB/i/Post))
+
+(define int->LDRB/i/Pre/struct int->LDR/i/Post/struct)
+
+(define (int->LDRB/i/Pre i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 24) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) #x3)
+  ) #f]
+  [else (apply LDRB/i/Pre (int->LDRB/i/Pre/struct i))])
+)
+
+(define LDRB/i/Pre->int LDR/i/Pre->int)
+
+(struct LDRB/i/Pre (size vr opc rm option s rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDRB/i/Pre->int
+  #:property prop:try-from-int int->LDRB/i/Pre
+)
+
+(provide (struct-out LDRB/i/Pre))
