@@ -52,3 +52,12 @@
 )
 
 (provide (struct-out LDR/r))
+
+(define (option->extend option)
+  (match option
+    [#x010 'UXTW]
+    [#x011 'LSL]
+    [#x110 'SXTW]
+    [#x111 'SXTX]
+  )
+)
