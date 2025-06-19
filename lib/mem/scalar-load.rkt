@@ -246,4 +246,29 @@
   #:property prop:try-from-int int->LDRB/r
 )
 
-(provide (struct-out LDRB/r))
+(provide (struct-out LDRB/i/Post))
+
+(define int->LDRB/i/Post/struct int->LDR/r/struct)
+
+(define (int->LDRB/i/Post i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 24) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) 1)
+  ) #f]
+  [else (apply LDRB/i/Post (int->LDRB/i/Post/struct i))])
+)
+
+(define LDRB/i/Post->int LDR/i/Post->int)
+
+(struct LDRB/i/Post (size vr opc rm option s rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDRB/i/Post->int
+  #:property prop:try-from-int int->LDRB/i/Post
+)
+
+(provide (struct-out LDRB/i/Post))
