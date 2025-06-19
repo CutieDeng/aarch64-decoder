@@ -185,3 +185,40 @@
 )
 
 (provide (struct-out LDR/i/Unsigned))
+
+(define (int->LDR/l/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 26 27)
+    (bitwise-bit-field i 5 24)
+    (bitwise-bit-field i 0 5)
+  )
+)
+
+(define (int->LDR/l i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x3)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+  ) #f]
+  [else (apply LDR/l (int->LDR/l/struct i))])
+)
+
+(define (LDR/l->int l)
+  (match-define (LDR/l size vr imm19 rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x3 27)
+    (arithmetic-shift vr 26)
+    (arithmetic-shift imm19 5)
+    rt
+  )
+)
+
+(struct LDR/l (size vr imm19 rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDR/l->int
+  #:property prop:try-from-int int->LDR/l
+)
+
+(provide (struct-out LDR/l))
