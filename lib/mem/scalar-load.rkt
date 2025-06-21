@@ -237,7 +237,23 @@
   [else (apply LDRB/r (int->LDRB/r/struct i))])
 )
 
-(define LDRB/r->int LDR/r->int)
+(define (LDRB/r->int l)
+  (match-define (LDRB/r size vr opc rm option s rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift vr 26)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift option 13)
+    (arithmetic-shift s 12)
+    (arithmetic-shift #x2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
 
 (struct LDRB/r (size vr opc rm option s rn rt)
   #:transparent
@@ -264,7 +280,7 @@
 
 (define LDRB/i/Post->int LDR/i/Post->int)
 
-(struct LDRB/i/Post (size vr opc rm option s rn rt)
+(struct LDRB/i/Post (size vr opc imm9 rn rt)
   #:transparent
   #:property prop:in-feature #hash()
   #:property prop:into-int LDRB/i/Post->int
