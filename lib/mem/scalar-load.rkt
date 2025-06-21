@@ -261,7 +261,7 @@
   #:property prop:try-from-int int->LDRB/r
 )
 
-(provide (struct-out LDRB/i/Post))
+(provide (struct-out LDRB/r))
 
 (define int->LDRB/i/Post/struct int->LDR/r/struct)
 
