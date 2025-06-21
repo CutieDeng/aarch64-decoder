@@ -328,7 +328,6 @@
   )
 )
 
-
 (struct LDRB/i/Pre (size vr opc imm9 rn rt)
   #:transparent
   #:property prop:in-feature #hash()
@@ -337,3 +336,38 @@
 )
 
 (provide (struct-out LDRB/i/Pre))
+
+(define int->LDRB/i/Unsigned/struct int->LDR/i/Unsigned/struct)
+
+(define (int->LDRB/i/Unsigned i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 1)
+    (equal? (bitwise-bit-field i 22 24) 1)
+  ) #f]
+  [else (apply LDRB/i/Unsigned (int->LDRB/i/Unsigned/struct i))])
+)
+
+(define (LDRB/i/Unsigned->int l)
+  (match-define (LDRB/i/Unsigned size vr opc imm12 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift vr 26)
+    (arithmetic-shift #x1 24)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm12 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDRB/i/Unsigned (size vr opc imm12 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDRB/i/Unsigned->int
+  #:property prop:try-from-int int->LDRB/i/Unsigned
+)
+
+(provide (struct-out LDRB/i/Unsigned))
