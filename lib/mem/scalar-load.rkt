@@ -289,7 +289,7 @@
 
 (define LDRB/i/Pre->int LDR/i/Pre->int)
 
-(struct LDRB/i/Pre (size vr opc rm option s rn rt)
+(struct LDRB/i/Pre (size vr opc imm9 rn rt)
   #:transparent
   #:property prop:in-feature #hash()
   #:property prop:into-int LDRB/i/Pre->int
