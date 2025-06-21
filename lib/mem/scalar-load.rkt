@@ -314,7 +314,20 @@
   [else (apply LDRB/i/Pre (int->LDRB/i/Pre/struct i))])
 )
 
-(define LDRB/i/Pre->int LDR/i/Pre->int)
+(define (LDRB/i/Pre->int l)
+  (match-define (LDRB/i/Pre size vr opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift vr 26)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x1 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
 
 (struct LDRB/i/Pre (size vr opc imm9 rn rt)
   #:transparent
