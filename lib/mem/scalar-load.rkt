@@ -263,7 +263,7 @@
 
 (provide (struct-out LDRB/r))
 
-(define int->LDRB/i/Post/struct int->LDR/r/struct)
+(define int->LDRB/i/Post/struct int->LDR/i/Post/struct)
 
 (define (int->LDRB/i/Post i)
   (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
@@ -458,3 +458,115 @@
 )
 
 (provide (struct-out LDRH/r))
+
+(define (int->LDRSB/i/Post/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 22 24)
+    (bitwise-bit-field i 12 21)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->LDRSB/i/Post i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 23 24) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) 1)
+  ) #f]
+  [else (apply LDRSB/i/Post (int->LDRSB/i/Post/struct i))])
+)
+
+(define (LDRSB/i/Post->int l)
+  (match-define (LDRSB/i/Post size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x1 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDRSB/i/Post (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDRSB/i/Post->int
+  #:property prop:try-from-int int->LDRSB/i/Post
+)
+
+(provide (struct-out LDRSB/i/Post))
+
+(define int->LDRSB/i/Pre/struct int->LDRSB/i/Post/struct)
+
+(define (int->LDRSB/i/Pre i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 23 24) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) #x3)
+  ) #f]
+  [else (apply LDRSB/i/Pre (int->LDRSB/i/Pre/struct i))])
+)
+
+(define (LDRSB/i/Pre->int l)
+  (match-define (LDRSB/i/Pre size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x3 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDRSB/i/Pre (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDRSB/i/Pre->int
+  #:property prop:try-from-int int->LDRSB/i/Pre
+)
+
+(provide (struct-out LDRSB/i/Pre))
+
+(define int->LDRSB/i/Unsigned/struct int->LDRSB/i/Post/struct)
+
+(define (int->LDRSB/i/Unsigned i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 1)
+    (equal? (bitwise-bit-field i 23 24) 1)
+  ) #f]
+  [else (apply LDRSB/i/Unsigned (int->LDRSB/i/Unsigned/struct i))])
+)
+
+(define (LDRSB/i/Unsigned->int l)
+  (match-define (LDRSB/i/Unsigned size opc imm12 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift #x1 24)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm12 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDRSB/i/Unsigned (size opc imm12 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDRSB/i/Unsigned->int
+  #:property prop:try-from-int int->LDRSB/i/Unsigned
+)
+
+(provide (struct-out LDRSB/i/Unsigned))
