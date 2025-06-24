@@ -34,7 +34,7 @@
     (arithmetic-shift #x7 27)
     (arithmetic-shift #x1 23)
     (arithmetic-shift #x1 21)
-    (arithmetic-shift #x1f 16)
+    (arithmetic-shift rs 16)
     (arithmetic-shift #x1 15)
     (arithmetic-shift #x4 12)
     (arithmetic-shift rn 5)
