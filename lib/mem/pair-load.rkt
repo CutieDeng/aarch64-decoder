@@ -157,3 +157,38 @@
 )
 
 (provide (struct-out LDPSW/Post))
+
+(define int->LDPSW/Pre/struct int->LDP/Post/struct)
+
+(define (int->LDPSW/Pre i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) #x1)
+    (equal? (bitwise-bit-field i 27 30) #x5)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 23 26) #x3)
+    (equal? (bitwise-bit-field i 22 23) 1)
+  ) #f]
+  [else (apply LDPSW/Pre (int->LDPSW/Pre/struct i))])
+)
+
+(define (LDPSW/Pre->int l)
+  (match-define (LDPSW/Pre opc l imm7 rt2 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift opc 30)
+    (arithmetic-shift #x5 27)
+    (arithmetic-shift #x3 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift imm7 15)
+    (arithmetic-shift rt2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDPSW/Pre (opc l imm7 rt2 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDPSW/Pre->int
+  #:property prop:try-from-int int->LDPSW/Pre
+)
+
+(provide (struct-out LDPSW/Pre))
