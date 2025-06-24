@@ -59,8 +59,9 @@
   (list (bitwise-bit-field i 30 31)
     (bitwise-bit-field i 22 23)
     (bitwise-bit-field i 21 22)
-    (bitwise-bit-field i 16 17)
-    (bitwise-bit-field i 13 16) (bitwise-bit-field i 12 13)
+    (bitwise-bit-field i 16 21)
+    (bitwise-bit-field i 13 16)
+    (bitwise-bit-field i 12 13)
     (bitwise-bit-field i 10 12)
     (bitwise-bit-field i 5 10)
     (bitwise-bit-field i 0 5))
@@ -69,11 +70,9 @@
 (define (int->LD1R/Post i)
   (cond [(nand
     (equal? (bitwise-bit-field i 31 32) 0)
-    (equal? (bitwise-bit-field i 23 30) #x1a)
+    (equal? (bitwise-bit-field i 23 30) #x1b)
     (equal? (bitwise-bit-field i 22 23) 1)
     (equal? (bitwise-bit-field i 21 22) 0)
-    (equal? (bitwise-bit-field i 17 21) 0)
-    (equal? (bitwise-bit-field i 16 17) 0)
     (equal? (bitwise-bit-field i 13 16) #x6)
     (equal? (bitwise-bit-field i 12 13) 0)
   ) #f]
@@ -154,8 +153,6 @@
     (equal? (bitwise-bit-field i 23 30) #x1b)
     (equal? (bitwise-bit-field i 22 23) 1)
     (equal? (bitwise-bit-field i 21 22) 1)
-    (equal? (bitwise-bit-field i 17 21) 0)
-    (equal? (bitwise-bit-field i 16 17) 0)
     (equal? (bitwise-bit-field i 13 16) #x6)
     (equal? (bitwise-bit-field i 12 13) 0)
   ) #f]
