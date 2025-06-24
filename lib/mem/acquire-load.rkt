@@ -51,6 +51,46 @@
 
 (provide (struct-out LDAPR))
 
+(define (int->LDAPR/Post/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 16 21)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->LDAPR/Post i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x3)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 23 26) #x3)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 10 22) #x2)
+  ) #f]
+  [else (apply LDAPR/Post (int->LDAPR/Post/struct i))])
+)
+
+(define (LDAPR/Post->int l)
+  (match-define (LDAPR/Post size rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x3 27)
+    (arithmetic-shift #x3 23)
+    (arithmetic-shift #x1 22)
+    (arithmetic-shift #x2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDAPR/Post (size rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LRCPC3 . #t))
+  #:property prop:into-int LDAPR/Post->int
+  #:property prop:try-from-int int->LDAPR/Post
+)
+
+(provide (struct-out LDAPR/Post))
+
 (define int->LDAPRB/struct int->LDAPR/struct)
 
 (define (int->LDAPRB i)
