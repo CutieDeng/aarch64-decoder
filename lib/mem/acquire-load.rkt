@@ -279,3 +279,36 @@
 )
 
 (provide (struct-out LDAPURH))
+
+(define int->LDAPURSB/struct int->LDAPUR/struct)
+
+(define (int->LDAPURSB i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 24 30) #x19)
+    (equal? (bitwise-bit-field i 23 24) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDAPURSB (int->LDAPURSB/struct i))])
+)
+
+(define (LDAPURSB->int l)
+  (match-define (LDAPURSB size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x19 24)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDAPURSB (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LRCPC2 . #t))
+  #:property prop:into-int LDAPURSB->int
+  #:property prop:try-from-int int->LDAPURSB
+)
+
+(provide (struct-out LDAPURSB))
