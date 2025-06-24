@@ -607,7 +607,7 @@
     (equal? (bitwise-bit-field i 23 30) #x19)
     (equal? (bitwise-bit-field i 22 23) 1)
     (equal? (bitwise-bit-field i 21 22) 0)
-    (equal? (bitwise-bit-field i 12 16) #x8)
+    (equal? (bitwise-bit-field i 12 16) 0)
   ) #f]
   [else (apply LD4/m/Post (int->LD4/m/Post/struct i))])
 )
