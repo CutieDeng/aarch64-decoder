@@ -175,7 +175,6 @@
     (bitwise-bit-field i 0 5))
 )
 
-
 (define (int->STLUR i)
   (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
     (equal? (bitwise-bit-field i 24 30) #x19)
@@ -206,3 +205,36 @@
 )
 
 (provide (struct-out STLUR))
+
+(define int->STLURB/struct int->STLUR/struct)
+
+(define (int->STLURB i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 24 30) #x19)
+    (equal? (bitwise-bit-field i 22 24) 0)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply STLURB (int->STLURB/struct i))])
+)
+
+(define (STLURB->int l)
+  (match-define (STLURB size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x19 24)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct STLURB (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LRCPC2 . #t))
+  #:property prop:into-int STLURB->int
+  #:property prop:try-from-int int->STLURB
+)
+
+(provide (struct-out STLURB))
