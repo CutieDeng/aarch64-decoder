@@ -207,3 +207,45 @@
 )
 
 (provide (struct-out LDR/NEON/l))
+
+(define (int->LDUR/NEON/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 22 24)
+    (bitwise-bit-field i 12 21)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->LDUR/NEON i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 1)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDUR/NEON (int->LDUR/NEON/struct i))])
+)
+
+(define (LDUR/NEON->int l)
+  (match-define (LDUR/NEON size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift #x1 26)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDUR/NEON (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDUR/NEON->int
+  #:property prop:try-from-int int->LDUR/NEON
+)
+
+(provide (struct-out LDUR/NEON))
