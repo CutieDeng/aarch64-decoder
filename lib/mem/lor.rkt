@@ -168,9 +168,9 @@
 
 (provide (struct-out STLLRB))
 
-(define int->STRLRH/struct int->LDLARB/struct)
+(define int->STLLRH/struct int->LDLARB/struct)
 
-(define (int->STRLRH i)
+(define (int->STLLRH i)
   (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
     (equal? (bitwise-bit-field i 24 30) #x8)
     (equal? (bitwise-bit-field i 23 24) #x1)
@@ -180,11 +180,11 @@
     (equal? (bitwise-bit-field i 15 16) 0)
     (equal? (bitwise-bit-field i 10 15) #x1f)
   ) #f]
-  [else (apply STRLRH (int->STRLRH/struct i))])
+  [else (apply STLLRH (int->STLLRH/struct i))])
 )
 
-(define (STRLRH->int l)
-  (match-define (STRLRH size l rs o0 rt2 rn rt) l)
+(define (STLLRH->int l)
+  (match-define (STLLRH size l rs o0 rt2 rn rt) l)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -198,18 +198,18 @@
   )
 )
 
-(struct STRLRH (size l rs o0 rt2 rn rt)
+(struct STLLRH (size l rs o0 rt2 rn rt)
   #:transparent
   #:property prop:in-feature #hash((FEAT_LOR . #t))
-  #:property prop:into-int STRLRH->int
-  #:property prop:try-from-int int->STRLRH
+  #:property prop:into-int STLLRH->int
+  #:property prop:try-from-int int->STLLRH
 )
 
-(provide (struct-out STRLRH))
+(provide (struct-out STLLRH))
 
-(define int->STRLR/struct int->LDLARB/struct)
+(define int->STLLR/struct int->LDLARB/struct)
 
-(define (int->STRLR i)
+(define (int->STLLR i)
   (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
     (equal? (bitwise-bit-field i 24 30) #x8)
     (equal? (bitwise-bit-field i 23 24) #x1)
@@ -219,11 +219,11 @@
     (equal? (bitwise-bit-field i 15 16) 0)
     (equal? (bitwise-bit-field i 10 15) #x1f)
   ) #f]
-  [else (apply STRLR (int->STRLR/struct i))])
+  [else (apply STLLR (int->STLLR/struct i))])
 )
 
-(define (STRLR->int l)
-  (match-define (STRLR size l rs o0 rt2 rn rt) l)
+(define (STLLR->int l)
+  (match-define (STLLR size l rs o0 rt2 rn rt) l)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -237,11 +237,11 @@
   )
 )
 
-(struct STRLR (size l rs o0 rt2 rn rt)
+(struct STLLR (size l rs o0 rt2 rn rt)
   #:transparent
   #:property prop:in-feature #hash((FEAT_LOR . #t))
-  #:property prop:into-int STRLR->int
-  #:property prop:try-from-int int->STRLR
+  #:property prop:into-int STLLR->int
+  #:property prop:try-from-int int->STLLR
 )
 
-(provide (struct-out STRLR))
+(provide (struct-out STLLR))
