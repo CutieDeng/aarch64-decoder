@@ -8,8 +8,7 @@
   (list (bitwise-bit-field i 30 32)
     (bitwise-bit-field i 22 23)
     (bitwise-bit-field i 16 21)
-    (bitwise-bit-field i 15 16)
-    (bitwise-bit-field i 10 15)
+    (bitwise-bit-field i 12 16)
     (bitwise-bit-field i 5 10)
     (bitwise-bit-field i 0 5))
 )
@@ -51,14 +50,7 @@
 
 (provide (struct-out LDIAPP))
 
-(define (int->STILP/struct i)
-  (list (bitwise-bit-field i 30 32)
-    (bitwise-bit-field i 22 23)
-    (bitwise-bit-field i 16 21)
-    (bitwise-bit-field i 12 16)
-    (bitwise-bit-field i 5 10)
-    (bitwise-bit-field i 0 5))
-)
+(define int->STILP/struct int->LDIAPP/struct)
 
 (define (int->STILP i)
   (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
