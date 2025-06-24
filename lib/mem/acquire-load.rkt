@@ -27,8 +27,8 @@
   [else (apply LDAPR (int->LDAPR/struct i))])
 )
 
-(define (LDAPR->int l)
-  (match-define (LDAPR size rs rn rt) l)
+(define (LDAPR->int ldapr)
+  (match-define (LDAPR size rs rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -69,8 +69,8 @@
   [else (apply LDAPR/Post (int->LDAPR/Post/struct i))])
 )
 
-(define (LDAPR/Post->int l)
-  (match-define (LDAPR/Post size rn rt) l)
+(define (LDAPR/Post->int ldapr)
+  (match-define (LDAPR/Post size rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x3 27)
@@ -109,8 +109,8 @@
   [else (apply LDAPRB (int->LDAPRB/struct i))])
 )
 
-(define (LDAPRB->int l)
-  (match-define (LDAPRB size rs rn rt) l)
+(define (LDAPRB->int ldapr)
+  (match-define (LDAPRB size rs rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -151,8 +151,8 @@
   [else (apply LDAPRH (int->LDAPRH/struct i))])
 )
 
-(define (LDAPRH->int l)
-  (match-define (LDAPRH size rs rn rt) l)
+(define (LDAPRH->int ldapr)
+  (match-define (LDAPRH size rs rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -193,8 +193,8 @@
   [else (apply LDAPUR (int->LDAPUR/struct i))])
 )
 
-(define (LDAPUR->int l)
-  (match-define (LDAPUR size opc imm9 rn rt) l)
+(define (LDAPUR->int ldapr)
+  (match-define (LDAPUR size opc imm9 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -226,8 +226,8 @@
   [else (apply LDAPURB (int->LDAPURB/struct i))])
 )
 
-(define (LDAPURB->int l)
-  (match-define (LDAPURB size opc imm9 rn rt) l)
+(define (LDAPURB->int ldapr)
+  (match-define (LDAPURB size opc imm9 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -259,8 +259,8 @@
   [else (apply LDAPURH (int->LDAPURH/struct i))])
 )
 
-(define (LDAPURH->int l)
-  (match-define (LDAPURH size opc imm9 rn rt) l)
+(define (LDAPURH->int ldapr)
+  (match-define (LDAPURH size opc imm9 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -292,8 +292,8 @@
   [else (apply LDAPURSB (int->LDAPURSB/struct i))])
 )
 
-(define (LDAPURSB->int l)
-  (match-define (LDAPURSB size opc imm9 rn rt) l)
+(define (LDAPURSB->int ldapr)
+  (match-define (LDAPURSB size opc imm9 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -325,8 +325,8 @@
   [else (apply LDAPURSH (int->LDAPURSH/struct i))])
 )
 
-(define (LDAPURSH->int l)
-  (match-define (LDAPURSH size opc imm9 rn rt) l)
+(define (LDAPURSH->int ldapr)
+  (match-define (LDAPURSH size opc imm9 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -358,8 +358,8 @@
   [else (apply LDAPURSW (int->LDAPURSW/struct i))])
 )
 
-(define (LDAPURSW->int l)
-  (match-define (LDAPURSW size opc imm9 rn rt) l)
+(define (LDAPURSW->int ldapr)
+  (match-define (LDAPURSW size opc imm9 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -402,8 +402,8 @@
   [else (apply LDAR (int->LDAR/struct i))])
 )
 
-(define (LDAR->int l)
-  (match-define (LDAR size l rs o0 rt2 rn rt) l)
+(define (LDAR->int ldapr)
+  (match-define (LDAR size l rs o0 rt2 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -442,8 +442,8 @@
   [else (apply LDARB (int->LDARB/struct i))])
 )
 
-(define (LDARB->int l)
-  (match-define (LDARB size l rs o0 rt2 rn rt) l)
+(define (LDARB->int ldapr)
+  (match-define (LDARB size l rs o0 rt2 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -481,8 +481,8 @@
   [else (apply LDARH (int->LDARH/struct i))])
 )
 
-(define (LDARH->int l)
-  (match-define (LDARH size l rs o0 rt2 rn rt) l)
+(define (LDARH->int ldapr)
+  (match-define (LDARH size l rs o0 rt2 rn rt) ldapr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
