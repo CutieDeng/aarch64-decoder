@@ -304,3 +304,42 @@
 )
 
 (provide (struct-out LD4R))
+
+(define int->LD4R/Post/struct int->LD1R/Post/struct)
+
+(define (int->LD4R/Post i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 31 32) 0)
+    (equal? (bitwise-bit-field i 23 30) #x1b)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 13 16) #x7)
+    (equal? (bitwise-bit-field i 12 13) 0)
+  ) #f]
+  [else (apply LD4R/Post (int->LD4R/Post/struct i))])
+)
+
+(define (LD4R/Post->int ld3)
+  (match-define (LD4R/Post q l r rm opcode s size rn rt) ld3)
+  (bitwise-ior
+    (arithmetic-shift q 30)
+    (arithmetic-shift #x1b 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift r 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift opcode 13)
+    (arithmetic-shift s 12)
+    (arithmetic-shift size 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LD4R/Post (q l r rm opcode s size rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LD4R/Post->int
+  #:property prop:try-from-int int->LD4R/Post
+)
+
+(provide (struct-out LD4R/Post))
