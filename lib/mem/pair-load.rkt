@@ -227,3 +227,37 @@
 )
 
 (provide (struct-out LDPSW/Signed))
+
+(define int->LDNP/struct int->LDP/Post/struct)
+
+(define (int->LDNP i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 31) 0)
+    (equal? (bitwise-bit-field i 27 30) #x5)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 23 26) 0)
+    (equal? (bitwise-bit-field i 22 23) 1)
+  ) #f]
+  [else (apply LDNP (int->LDNP/struct i))])
+)
+
+(define (LDNP->int l)
+  (match-define (LDNP opc l imm7 rt2 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift opc 30)
+    (arithmetic-shift #x5 27)
+    (arithmetic-shift l 22)
+    (arithmetic-shift imm7 15)
+    (arithmetic-shift rt2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDNP (opc l imm7 rt2 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDNP->int
+  #:property prop:try-from-int int->LDNP
+)
+
+(provide (struct-out LDNP))
