@@ -27,8 +27,8 @@
   [else (apply LDAXR (int->LDAXR/struct i))])
 )
 
-(define (LDAXR->int l)
-  (match-define (LDAXR size l rs o0 rt2 rn rt) l)
+(define (LDAXR->int ldaxr)
+  (match-define (LDAXR size l rs o0 rt2 rn rt) ldaxr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -65,8 +65,8 @@
   [else (apply LDAXRB (int->LDAXRB/struct i))])
 )
 
-(define (LDAXRB->int l)
-  (match-define (LDAXRB size l rs o0 rt2 rn rt) l)
+(define (LDAXRB->int ldaxr)
+  (match-define (LDAXRB size l rs o0 rt2 rn rt) ldaxr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -103,8 +103,8 @@
   [else (apply LDAXRH (int->LDAXRH/struct i))])
 )
 
-(define (LDAXRH->int l)
-  (match-define (LDAXRH size l rs o0 rt2 rn rt) l)
+(define (LDAXRH->int ldaxr)
+  (match-define (LDAXRH size l rs o0 rt2 rn rt) ldaxr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -148,8 +148,8 @@
   [else (apply LDAXP (int->LDAXP/struct i))])
 )
 
-(define (LDAXP->int l)
-  (match-define (LDAXP sz l rs o0 rt2 rn rt) l)
+(define (LDAXP->int ldaxr)
+  (match-define (LDAXP sz l rs o0 rt2 rn rt) ldaxr)
   (bitwise-ior
     (arithmetic-shift 1 31)
     (arithmetic-shift sz 30)
