@@ -153,3 +153,39 @@
 )
 
 (provide (struct-out LDTRH))
+
+(define int->LDTRSH/struct int->LDTR/struct)
+
+(define (int->LDTRSH i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 23 24) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) #x2)
+  ) #f]
+  [else (apply LDTRSH (int->LDTRSH/struct i))])
+)
+
+(define (LDTRSH->int l)
+  (match-define (LDTRSH size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDTRSH (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDTRSH->int
+  #:property prop:try-from-int int->LDTRSH
+)
+
+(provide (struct-out LDTRSH))
