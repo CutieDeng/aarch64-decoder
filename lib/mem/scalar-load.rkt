@@ -27,8 +27,8 @@
   [else (apply LDR/r (int->LDR/r/struct i))])
 )
 
-(define (LDR/r->int l)
-  (match-define (LDR/r size vr opc rm option s rn rt) l)
+(define (LDR/r->int ldr)
+  (match-define (LDR/r size vr opc rm option s rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -83,8 +83,8 @@
   [else (apply LDR/i/Post (int->LDR/i/Post/struct i))])
 )
 
-(define (LDR/i/Post->int l)
-  (match-define (LDR/i/Post size vr opc imm9 rn rt) l)
+(define (LDR/i/Post->int ldr)
+  (match-define (LDR/i/Post size vr opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -120,8 +120,8 @@
   [else (apply LDR/i/Pre (int->LDR/i/Pre/struct i))])
 )
 
-(define (LDR/i/Pre->int l)
-  (match-define (LDR/i/Pre size vr opc imm9 rn rt) l)
+(define (LDR/i/Pre->int ldr)
+  (match-define (LDR/i/Pre size vr opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -163,8 +163,8 @@
   [else (apply LDR/i/Unsigned (int->LDR/i/Unsigned/struct i))])
 )
 
-(define (LDR/i/Unsigned->int l)
-  (match-define (LDR/i/Unsigned size vr opc imm12 rn rt) l)
+(define (LDR/i/Unsigned->int ldr)
+  (match-define (LDR/i/Unsigned size vr opc imm12 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -203,8 +203,8 @@
   [else (apply LDR/l (int->LDR/l/struct i))])
 )
 
-(define (LDR/l->int l)
-  (match-define (LDR/l size vr imm19 rt) l)
+(define (LDR/l->int ldr)
+  (match-define (LDR/l size vr imm19 rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x3 27)
@@ -237,8 +237,8 @@
   [else (apply LDRB/r (int->LDRB/r/struct i))])
 )
 
-(define (LDRB/r->int l)
-  (match-define (LDRB/r size vr opc rm option s rn rt) l)
+(define (LDRB/r->int ldr)
+  (match-define (LDRB/r size vr opc rm option s rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -277,8 +277,8 @@
   [else (apply LDRB/i/Post (int->LDRB/i/Post/struct i))])
 )
 
-(define (LDRB/i/Post->int l)
-  (match-define (LDRB/i/Post size vr opc imm9 rn rt) l)
+(define (LDRB/i/Post->int ldr)
+  (match-define (LDRB/i/Post size vr opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -314,8 +314,8 @@
   [else (apply LDRB/i/Pre (int->LDRB/i/Pre/struct i))])
 )
 
-(define (LDRB/i/Pre->int l)
-  (match-define (LDRB/i/Pre size vr opc imm9 rn rt) l)
+(define (LDRB/i/Pre->int ldr)
+  (match-define (LDRB/i/Pre size vr opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -349,8 +349,8 @@
   [else (apply LDRB/i/Unsigned (int->LDRB/i/Unsigned/struct i))])
 )
 
-(define (LDRB/i/Unsigned->int l)
-  (match-define (LDRB/i/Unsigned size vr opc imm12 rn rt) l)
+(define (LDRB/i/Unsigned->int ldr)
+  (match-define (LDRB/i/Unsigned size vr opc imm12 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -386,8 +386,8 @@
   [else (apply LDRSB/r (int->LDRSB/r/struct i))])
 )
 
-(define (LDRSB/r->int l)
-  (match-define (LDRSB/r size vr opc rm option s rn rt) l)
+(define (LDRSB/r->int ldr)
+  (match-define (LDRSB/r size vr opc rm option s rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -434,8 +434,8 @@
   [else (apply LDRH/r (int->LDRH/r/struct i))])
 )
 
-(define (LDRH/r->int l)
-  (match-define (LDRH/r size opc rm option s rn rt) l)
+(define (LDRH/r->int ldr)
+  (match-define (LDRH/r size opc rm option s rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -479,8 +479,8 @@
   [else (apply LDRSB/i/Post (int->LDRSB/i/Post/struct i))])
 )
 
-(define (LDRSB/i/Post->int l)
-  (match-define (LDRSB/i/Post size opc imm9 rn rt) l)
+(define (LDRSB/i/Post->int ldr)
+  (match-define (LDRSB/i/Post size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -515,8 +515,8 @@
   [else (apply LDRSB/i/Pre (int->LDRSB/i/Pre/struct i))])
 )
 
-(define (LDRSB/i/Pre->int l)
-  (match-define (LDRSB/i/Pre size opc imm9 rn rt) l)
+(define (LDRSB/i/Pre->int ldr)
+  (match-define (LDRSB/i/Pre size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -549,8 +549,8 @@
   [else (apply LDRSB/i/Unsigned (int->LDRSB/i/Unsigned/struct i))])
 )
 
-(define (LDRSB/i/Unsigned->int l)
-  (match-define (LDRSB/i/Unsigned size opc imm12 rn rt) l)
+(define (LDRSB/i/Unsigned->int ldr)
+  (match-define (LDRSB/i/Unsigned size opc imm12 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -585,8 +585,8 @@
   [else (apply LDRH/i/Post (int->LDRH/i/Post/struct i))])
 )
 
-(define (LDRH/i/Post->int l)
-  (match-define (LDRH/i/Post size opc imm9 rn rt) l)
+(define (LDRH/i/Post->int ldr)
+  (match-define (LDRH/i/Post size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -621,8 +621,8 @@
   [else (apply LDRH/i/Pre (int->LDRH/i/Pre/struct i))])
 )
 
-(define (LDRH/i/Pre->int l)
-  (match-define (LDRH/i/Pre size opc imm9 rn rt) l)
+(define (LDRH/i/Pre->int ldr)
+  (match-define (LDRH/i/Pre size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -655,8 +655,8 @@
   [else (apply LDRH/i/Unsigned (int->LDRH/i/Unsigned/struct i))])
 )
 
-(define (LDRH/i/Unsigned->int l)
-  (match-define (LDRH/i/Unsigned size opc imm12 rn rt) l)
+(define (LDRH/i/Unsigned->int ldr)
+  (match-define (LDRH/i/Unsigned size opc imm12 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -691,8 +691,8 @@
   [else (apply LDRSH/r (int->LDRSH/r/struct i))])
 )
 
-(define (LDRSH/r->int l)
-  (match-define (LDRSH/r size opc rm option s rn rt) l)
+(define (LDRSH/r->int ldr)
+  (match-define (LDRSH/r size opc rm option s rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -730,8 +730,8 @@
   [else (apply LDRSH/i/Post (int->LDRSH/i/Post/struct i))])
 )
 
-(define (LDRSH/i/Post->int l)
-  (match-define (LDRSH/i/Post size opc imm9 rn rt) l)
+(define (LDRSH/i/Post->int ldr)
+  (match-define (LDRSH/i/Post size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -766,8 +766,8 @@
   [else (apply LDRSH/i/Pre (int->LDRSH/i/Pre/struct i))])
 )
 
-(define (LDRSH/i/Pre->int l)
-  (match-define (LDRSH/i/Pre size opc imm9 rn rt) l)
+(define (LDRSH/i/Pre->int ldr)
+  (match-define (LDRSH/i/Pre size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -800,8 +800,8 @@
   [else (apply LDRSH/i/Unsigned (int->LDRSH/i/Unsigned/struct i))])
 )
 
-(define (LDRSH/i/Unsigned->int l)
-  (match-define (LDRSH/i/Unsigned size opc imm12 rn rt) l)
+(define (LDRSH/i/Unsigned->int ldr)
+  (match-define (LDRSH/i/Unsigned size opc imm12 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -836,8 +836,8 @@
   [else (apply LDRSW/r (int->LDRSW/r/struct i))])
 )
 
-(define (LDRSW/r->int l)
-  (match-define (LDRSW/r size opc rm option s rn rt) l)
+(define (LDRSW/r->int ldr)
+  (match-define (LDRSW/r size opc rm option s rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -875,8 +875,8 @@
   [else (apply LDRSW/i/Post (int->LDRSW/i/Post/struct i))])
 )
 
-(define (LDRSW/i/Post->int l)
-  (match-define (LDRSW/i/Post size opc imm9 rn rt) l)
+(define (LDRSW/i/Post->int ldr)
+  (match-define (LDRSW/i/Post size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -911,8 +911,8 @@
   [else (apply LDRSW/i/Pre (int->LDRSW/i/Pre/struct i))])
 )
 
-(define (LDRSW/i/Pre->int l)
-  (match-define (LDRSW/i/Pre size opc imm9 rn rt) l)
+(define (LDRSW/i/Pre->int ldr)
+  (match-define (LDRSW/i/Pre size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -945,8 +945,8 @@
   [else (apply LDRSW/i/Unsigned (int->LDRSW/i/Unsigned/struct i))])
 )
 
-(define (LDRSW/i/Unsigned->int l)
-  (match-define (LDRSW/i/Unsigned size opc imm12 rn rt) l)
+(define (LDRSW/i/Unsigned->int ldr)
+  (match-define (LDRSW/i/Unsigned size opc imm12 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -983,8 +983,8 @@
   [else (apply LDRSW/l (int->LDRSW/l/struct i))])
 )
 
-(define (LDRSW/l->int l)
-  (match-define (LDRSW/l size imm19 rt) l)
+(define (LDRSW/l->int ldr)
+  (match-define (LDRSW/l size imm19 rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x3 27)
