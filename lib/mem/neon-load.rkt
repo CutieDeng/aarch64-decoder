@@ -15,7 +15,7 @@
 )
 
 (define (int->LDR/NEON i)
-  (cond [(nand (equal? (bitwise-bit-field i 30 31) 0)
+  (cond [(nand
     (equal? (bitwise-bit-field i 27 30) #x7)
     (equal? (bitwise-bit-field i 26 27) 1)
     (equal? (bitwise-bit-field i 24 26) 0)
