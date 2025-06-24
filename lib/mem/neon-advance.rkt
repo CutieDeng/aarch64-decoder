@@ -563,3 +563,38 @@
 )
 
 (provide (struct-out LD4/s/Post))
+
+(define int->LD4/m/struct int->LD1/m/struct)
+
+(define (int->LD4/m i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 31 32) 0)
+    (equal? (bitwise-bit-field i 23 30) #x18)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 16 22) 0)
+    (equal? (bitwise-bit-field i 12 16) 0)
+  ) #f]
+  [else (apply LD4/m (int->LD4/m/struct i))])
+)
+
+(define (LD4/m->int ld4)
+  (match-define (LD4/m q l opcode size rn rt) ld4)
+  (bitwise-ior
+    (arithmetic-shift q 30)
+    (arithmetic-shift #x18 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift opcode 12)
+    (arithmetic-shift size 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LD4/m (q l opcode size rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LD4/m->int
+  #:property prop:try-from-int int->LD4/m
+)
+
+(provide (struct-out LD4/m))
