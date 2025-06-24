@@ -258,3 +258,39 @@
 )
 
 (provide (struct-out STP/NEON/Post))
+
+(define int->STP/NEON/Pre/struct int->STP/NEON/Post/struct)
+
+(define (int->STP/NEON/Pre i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 27 30) #x5)
+    (equal? (bitwise-bit-field i 26 27) 1)
+    (equal? (bitwise-bit-field i 23 26) #x3)
+    (equal? (bitwise-bit-field i 22 23) 0)
+  ) #f]
+  [else (apply STP/NEON/Pre (int->STP/NEON/Pre/struct i))])
+)
+
+(define (STP/NEON/Pre->int l)
+  (match-define (STP/NEON/Pre opc l imm7 rt2 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift opc 30)
+    (arithmetic-shift #x5 27)
+    (arithmetic-shift #x1 26)
+    (arithmetic-shift #x3 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift imm7 15)
+    (arithmetic-shift rt2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct STP/NEON/Pre (opc l imm7 rt2 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int STP/NEON/Pre->int
+  #:property prop:try-from-int int->STP/NEON/Pre
+)
+
+(provide (struct-out STP/NEON/Pre))
