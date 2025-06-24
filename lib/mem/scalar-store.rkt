@@ -248,7 +248,7 @@
 (define int->STRB/i/Pre/struct int->STR/i/Post/struct)
 
 (define (int->STRB/i/Pre i)
-  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
     (equal? (bitwise-bit-field i 27 30) #x7)
     (equal? (bitwise-bit-field i 26 27) 0)
     (equal? (bitwise-bit-field i 24 26) 0)
@@ -353,3 +353,109 @@
 )
 
 (provide (struct-out STRH/r))
+
+(define int->STRH/i/Post/struct int->STR/i/Post/struct)
+
+(define (int->STRH/i/Post i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 24) 0)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) 1)
+  ) #f]
+  [else (apply STRH/i/Post (int->STRH/i/Post/struct i))])
+)
+
+(define (STRH/i/Post->int l)
+  (match-define (STRH/i/Post size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x1 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct STRH/i/Post (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int STRH/i/Post->int
+  #:property prop:try-from-int int->STRH/i/Post
+)
+
+(provide (struct-out STRH/i/Post))
+
+(define int->STRH/i/Pre/struct int->STR/i/Post/struct)
+
+(define (int->STRH/i/Pre i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 24) 0)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) #x3)
+  ) #f]
+  [else (apply STRH/i/Pre (int->STRH/i/Pre/struct i))])
+)
+
+(define (STRH/i/Pre->int l)
+  (match-define (STRH/i/Pre size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x3 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct STRH/i/Pre (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int STRH/i/Pre->int
+  #:property prop:try-from-int int->STRH/i/Pre
+)
+
+(provide (struct-out STRH/i/Pre))
+
+(define int->STRH/i/Unsigned/struct int->STR/i/Unsigned/struct)
+
+(define (int->STRH/i/Unsigned i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 1)
+    (equal? (bitwise-bit-field i 22 24) 0)
+  ) #f]
+  [else (apply STRH/i/Unsigned (int->STRH/i/Unsigned/struct i))])
+)
+
+(define (STRH/i/Unsigned->int l)
+  (match-define (STRH/i/Unsigned size opc imm12 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift #x1 24)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm12 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct STRH/i/Unsigned (size opc imm12 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int STRH/i/Unsigned->int
+  #:property prop:try-from-int int->STRH/i/Unsigned
+)
+
+(provide (struct-out STRH/i/Unsigned))
