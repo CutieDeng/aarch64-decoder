@@ -48,7 +48,7 @@
 (define int->STURB/struct int->STUR/struct)
 
 (define (int->STURB i)
-  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
     (equal? (bitwise-bit-field i 27 30) #x7)
     (equal? (bitwise-bit-field i 26 27) 0)
     (equal? (bitwise-bit-field i 24 26) 0)
