@@ -126,7 +126,15 @@
 
 (provide (struct-out LDXRH))
 
-(define int->LDXP/struct int->LDXR/struct)
+(define (int->LDXP/struct i)
+  (list (bitwise-bit-field i 30 31)
+    (bitwise-bit-field i 22 23)
+    (bitwise-bit-field i 16 21)
+    (bitwise-bit-field i 15 16)
+    (bitwise-bit-field i 10 15)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
 
 (define (int->LDXP i)
   (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
