@@ -53,3 +53,51 @@
 )
 
 (provide (struct-out LD1/s))
+
+(define (int->LD1/s/Post/struct i)
+  (list (bitwise-bit-field i 30 31)
+    (bitwise-bit-field i 22 23)
+    (bitwise-bit-field i 21 22)
+    (bitwise-bit-field i 16 21)
+    (bitwise-bit-field i 13 16)
+    (bitwise-bit-field i 12 13)
+    (bitwise-bit-field i 10 12)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->LD1/s/Post i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 31 32) 0)
+    (equal? (bitwise-bit-field i 23 30) #x1b)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 13 14) 0)
+  ) #f]
+  [else (apply LD1/s/Post (int->LD1/s/Post/struct i))])
+)
+
+(define (LD1/s/Post->int l)
+  (match-define (LD1/s/Post q l r rm opcode s size rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift q 30)
+    (arithmetic-shift #x1a 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift r 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift opcode 13)
+    (arithmetic-shift s 12)
+    (arithmetic-shift size 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LD1/s/Post (q l r rm opcode s size rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LD1/s/Post->int
+  #:property prop:try-from-int int->LD1/s/Post
+)
+
+(provide (struct-out LD1/s/Post))
