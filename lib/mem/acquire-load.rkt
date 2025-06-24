@@ -392,7 +392,6 @@
 (define (int->LDAR i)
   (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
     (equal? (bitwise-bit-field i 24 30) #x8)
-    (equal? (bitwise-bit-field i 26 27) 0)
     (equal? (bitwise-bit-field i 23 24) 1)
     (equal? (bitwise-bit-field i 22 23) 1)
     (equal? (bitwise-bit-field i 21 22) 0)
