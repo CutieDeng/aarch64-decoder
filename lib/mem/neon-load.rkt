@@ -172,3 +172,38 @@
 )
 
 (provide (struct-out LDR/NEON/Unsigned))
+
+(define (int->LDR/NEON/l/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 5 24)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->LDR/NEON/l i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 27 30) #x3)
+    (equal? (bitwise-bit-field i 26 27) 1)
+    (equal? (bitwise-bit-field i 24 26) 0)
+  ) #f]
+  [else (apply LDR/NEON/l (int->LDR/NEON/l/struct i))])
+)
+
+(define (LDR/NEON/l->int l)
+  (match-define (LDR/NEON/l opc imm19 rt) l)
+  (bitwise-ior
+    (arithmetic-shift opc 30)
+    (arithmetic-shift #x3 27)
+    (arithmetic-shift #x1 26)
+    (arithmetic-shift imm19 5)
+    rt
+  )
+)
+
+(struct LDR/NEON/l (opc imm19 rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDR/NEON/l->int
+  #:property prop:try-from-int int->LDR/NEON/l
+)
+
+(provide (struct-out LDR/NEON/l))
