@@ -23,8 +23,8 @@
   [else (apply STP/Post (int->STP/Post/struct i))])
 )
 
-(define (STP/Post->int l)
-  (match-define (STP/Post opc l imm7 rt2 rn rt) l)
+(define (STP/Post->int stp)
+  (match-define (STP/Post opc l imm7 rt2 rn rt) stp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -58,8 +58,8 @@
   [else (apply STP/Pre (int->STP/Pre/struct i))])
 )
 
-(define (STP/Pre->int l)
-  (match-define (STP/Pre opc l imm7 rt2 rn rt) l)
+(define (STP/Pre->int stp)
+  (match-define (STP/Pre opc l imm7 rt2 rn rt) stp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -93,8 +93,8 @@
   [else (apply STP/Signed (int->STP/Signed/struct i))])
 )
 
-(define (STP/Signed->int l)
-  (match-define (STP/Signed opc l imm7 rt2 rn rt) l)
+(define (STP/Signed->int stp)
+  (match-define (STP/Signed opc l imm7 rt2 rn rt) stp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -128,8 +128,8 @@
   [else (apply STNP (int->STNP/struct i))])
 )
 
-(define (STNP->int l)
-  (match-define (STNP opc l imm7 rt2 rn rt) l)
+(define (STNP->int stp)
+  (match-define (STNP opc l imm7 rt2 rn rt) stp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
