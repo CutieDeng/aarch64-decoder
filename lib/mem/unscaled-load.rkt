@@ -184,3 +184,38 @@
 )
 
 (provide (struct-out LDURSH))
+
+(define int->LDURSW/struct int->LDUR/struct)
+
+(define (int->LDURSW i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) #x2)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 24) #x2)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDURSW (int->LDURSW/struct i))])
+)
+
+(define (LDURSW->int l)
+  (match-define (LDURSW size opc imm9 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDURSW (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDURSW->int
+  #:property prop:try-from-int int->LDURSW
+)
+
+(provide (struct-out LDURSW))
