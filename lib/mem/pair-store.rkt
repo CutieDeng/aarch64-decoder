@@ -115,3 +115,38 @@
 )
 
 (provide (struct-out STP/Signed))
+
+(define int->STNP/struct int->STP/Post/struct)
+
+(define (int->STNP i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 31) 0)
+    (equal? (bitwise-bit-field i 27 30) #x5)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 23 26) 0)
+    (equal? (bitwise-bit-field i 22 23) 0)
+  ) #f]
+  [else (apply STNP (int->STNP/struct i))])
+)
+
+(define (STNP->int l)
+  (match-define (STNP opc l imm7 rt2 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift opc 30)
+    (arithmetic-shift #x5 27)
+    (arithmetic-shift #x1 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift imm7 15)
+    (arithmetic-shift rt2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct STNP (opc l imm7 rt2 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int STNP->int
+  #:property prop:try-from-int int->STNP
+)
+
+(provide (struct-out STNP))
