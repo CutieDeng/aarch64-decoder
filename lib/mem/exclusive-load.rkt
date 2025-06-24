@@ -125,3 +125,42 @@
 )
 
 (provide (struct-out LDXRH))
+
+(define int->LDXP/struct int->LDXR/struct)
+
+(define (int->LDXP i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 24 30) #x8)
+    (equal? (bitwise-bit-field i 23 24) 0)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 16 21) #x1f)
+    (equal? (bitwise-bit-field i 15 16) 0)
+  ) #f]
+  [else (apply LDXP (int->LDXP/struct i))])
+)
+
+(define (LDXP->int l)
+  (match-define (LDXP sz l rs o0 rt2 rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift 1 31)
+    (arithmetic-shift sz 30)
+    (arithmetic-shift #x8 24)
+    (arithmetic-shift l 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift o0 15)
+    (arithmetic-shift rt2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDXP (sz l rs o0 rt2 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LDXP->int
+  #:property prop:try-from-int int->LDXP
+)
+
+(provide (struct-out LDXP))
