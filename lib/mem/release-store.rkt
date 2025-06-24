@@ -50,3 +50,41 @@
 )
 
 (provide (struct-out STLR))
+
+(define (int->STLR/Pre/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->STLR/Pre i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x3)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 23 26) #x3)
+    (equal? (bitwise-bit-field i 22 23) 0)
+    (equal? (bitwise-bit-field i 10 22) #x2)
+  ) #f]
+  [else (apply STLR/Pre (int->STLR/Pre/struct i))])
+)
+
+(define (STLR/Pre->int l)
+  (match-define (STLR/Pre size rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x3 27)
+    (arithmetic-shift #x3 23)
+    (arithmetic-shift #x2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct STLR/Pre (size rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LRCPC3 . #t))
+  #:property prop:into-int STLR/Pre->int
+  #:property prop:try-from-int int->STLR/Pre
+)
+
+(provide (struct-out STLR/Pre))
