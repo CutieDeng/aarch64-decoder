@@ -250,7 +250,7 @@
 
 (provide (struct-out LDUR/NEON))
 
-(define (int->LDP/NEON/struct i)
+(define (int->LDP/NEON/Post/struct i)
   (list (bitwise-bit-field i 30 32)
     (bitwise-bit-field i 22 23)
     (bitwise-bit-field i 15 22)
@@ -259,18 +259,18 @@
     (bitwise-bit-field i 0 5))
 )
 
-(define (int->LDP/NEON i)
+(define (int->LDP/NEON/Post i)
   (cond [(nand
     (equal? (bitwise-bit-field i 27 30) #x5)
     (equal? (bitwise-bit-field i 26 27) 1)
     (equal? (bitwise-bit-field i 23 26) 1)
     (equal? (bitwise-bit-field i 22 23) 1)
   ) #f]
-  [else (apply LDP/NEON (int->LDP/NEON/struct i))])
+  [else (apply LDP/NEON/Post (int->LDP/NEON/Post/struct i))])
 )
 
-(define (LDP/NEON->int l)
-  (match-define (LDP/NEON opc l imm7 rt2 rn rt) l)
+(define (LDP/NEON/Post->int l)
+  (match-define (LDP/NEON/Post opc l imm7 rt2 rn rt) l)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -284,11 +284,11 @@
   )
 )
 
-(struct LDP/NEON (opc l imm7 rt2 rn rt)
+(struct LDP/NEON/Post (opc l imm7 rt2 rn rt)
   #:transparent
   #:property prop:in-feature #hash()
-  #:property prop:into-int LDP/NEON->int
-  #:property prop:try-from-int int->LDP/NEON
+  #:property prop:into-int LDP/NEON/Post->int
+  #:property prop:try-from-int int->LDP/NEON/Post
 )
 
-(provide (struct-out LDP/NEON))
+(provide (struct-out LDP/NEON/Post))
