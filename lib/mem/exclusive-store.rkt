@@ -26,8 +26,8 @@
   [else (apply STXR (int->STXR/struct i))])
 )
 
-(define (STXR->int l)
-  (match-define (STXR size l rs o0 rt2 rn rt) l)
+(define (STXR->int stxr)
+  (match-define (STXR size l rs o0 rt2 rn rt) stxr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -63,8 +63,8 @@
   [else (apply STXRB (int->STXRB/struct i))])
 )
 
-(define (STXRB->int l)
-  (match-define (STXRB size l rs o0 rt2 rn rt) l)
+(define (STXRB->int stxr)
+  (match-define (STXRB size l rs o0 rt2 rn rt) stxr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -100,8 +100,8 @@
   [else (apply STXRH (int->STXRH/struct i))])
 )
 
-(define (STXRH->int l)
-  (match-define (STXRH size l rs o0 rt2 rn rt) l)
+(define (STXRH->int stxr)
+  (match-define (STXRH size l rs o0 rt2 rn rt) stxr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -144,8 +144,8 @@
   [else (apply STXP (int->STXP/struct i))])
 )
 
-(define (STXP->int l)
-  (match-define (STXP sz l rs o0 rt2 rn rt) l)
+(define (STXP->int stxr)
+  (match-define (STXP sz l rs o0 rt2 rn rt) stxr)
   (bitwise-ior
     (arithmetic-shift 1 31)
     (arithmetic-shift sz 30)
