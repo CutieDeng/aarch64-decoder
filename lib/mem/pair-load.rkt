@@ -23,8 +23,8 @@
   [else (apply LDP/Post (int->LDP/Post/struct i))])
 )
 
-(define (LDP/Post->int l)
-  (match-define (LDP/Post opc l imm7 rt2 rn rt) l)
+(define (LDP/Post->int ldp)
+  (match-define (LDP/Post opc l imm7 rt2 rn rt) ldp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -58,8 +58,8 @@
   [else (apply LDP/Pre (int->LDP/Pre/struct i))])
 )
 
-(define (LDP/Pre->int l)
-  (match-define (LDP/Pre opc l imm7 rt2 rn rt) l)
+(define (LDP/Pre->int ldp)
+  (match-define (LDP/Pre opc l imm7 rt2 rn rt) ldp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -93,8 +93,8 @@
   [else (apply LDP/Signed (int->LDP/Signed/struct i))])
 )
 
-(define (LDP/Signed->int l)
-  (match-define (LDP/Signed opc l imm7 rt2 rn rt) l)
+(define (LDP/Signed->int ldp)
+  (match-define (LDP/Signed opc l imm7 rt2 rn rt) ldp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -135,8 +135,8 @@
   [else (apply LDPSW/Post (int->LDPSW/Post/struct i))])
 )
 
-(define (LDPSW/Post->int l)
-  (match-define (LDPSW/Post opc l imm7 rt2 rn rt) l)
+(define (LDPSW/Post->int ldp)
+  (match-define (LDPSW/Post opc l imm7 rt2 rn rt) ldp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -170,8 +170,8 @@
   [else (apply LDPSW/Pre (int->LDPSW/Pre/struct i))])
 )
 
-(define (LDPSW/Pre->int l)
-  (match-define (LDPSW/Pre opc l imm7 rt2 rn rt) l)
+(define (LDPSW/Pre->int ldp)
+  (match-define (LDPSW/Pre opc l imm7 rt2 rn rt) ldp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -205,8 +205,8 @@
   [else (apply LDPSW/Signed (int->LDPSW/Signed/struct i))])
 )
 
-(define (LDPSW/Signed->int l)
-  (match-define (LDPSW/Signed opc l imm7 rt2 rn rt) l)
+(define (LDPSW/Signed->int ldp)
+  (match-define (LDPSW/Signed opc l imm7 rt2 rn rt) ldp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -240,8 +240,8 @@
   [else (apply LDNP (int->LDNP/struct i))])
 )
 
-(define (LDNP->int l)
-  (match-define (LDNP opc l imm7 rt2 rn rt) l)
+(define (LDNP->int ldp)
+  (match-define (LDNP opc l imm7 rt2 rn rt) ldp)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
