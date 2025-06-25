@@ -26,8 +26,8 @@
   [else (apply LDIAPP (int->LDIAPP/struct i))])
 )
 
-(define (LDIAPP->int l)
-  (match-define (LDIAPP size l rt2 opc2 rn rt) l)
+(define (LDIAPP->int ldiapp)
+  (match-define (LDIAPP size l rt2 opc2 rn rt) ldiapp)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x3 27)
@@ -65,8 +65,8 @@
   [else (apply STILP (int->STILP/struct i))])
 )
 
-(define (STILP->int l)
-  (match-define (STILP size l rt2 opc2 rn rt) l)
+(define (STILP->int stilp)
+  (match-define (STILP size l rt2 opc2 rn rt) stilp)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x3 27)
