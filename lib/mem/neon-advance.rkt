@@ -226,3 +226,41 @@
 )
 
 (provide (struct-out LD2/s))
+
+(define int->LD2/s/Post/struct int->LD1/s/Post/struct)
+
+(define (int->LD2/s/Post i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 31 32) 0)
+    (equal? (bitwise-bit-field i 23 30) #x1b)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 13 14) 0)
+  ) #f]
+  [else (apply LD2/s/Post (int->LD2/s/Post/struct i))])
+)
+
+(define (LD2/s/Post->int l)
+  (match-define (LD2/s/Post q l r rm opcode s size rn rt) l)
+  (bitwise-ior
+    (arithmetic-shift q 30)
+    (arithmetic-shift #x1b 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift r 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift opcode 13)
+    (arithmetic-shift s 12)
+    (arithmetic-shift size 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LD2/s/Post (q l r rm opcode s size rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LD2/s/Post->int
+  #:property prop:try-from-int int->LD2/s/Post
+)
+
+(provide (struct-out LD2/s/Post))
