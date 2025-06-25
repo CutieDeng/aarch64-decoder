@@ -116,6 +116,7 @@
     (equal? (bitwise-bit-field i 31 32) 0)
     (equal? (bitwise-bit-field i 23 30) #x18)
     (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 16 22) 0)
     (equal? (bitwise-bit-field i 13 14) 1)
   ) #f]
   [else (apply LD1/m (int->LD1/m/struct i))])
