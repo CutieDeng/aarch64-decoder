@@ -29,8 +29,8 @@
   [else (apply LD1/s (int->LD1/s/struct i))])
 )
 
-(define (LD1/s->int l)
-  (match-define (LD1/s q l r o2 opcode s size rn rt) l)
+(define (LD1/s->int ld1)
+  (match-define (LD1/s q l r o2 opcode s size rn rt) ld1)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1a 23)
@@ -77,8 +77,8 @@
   [else (apply LD1/s/Post (int->LD1/s/Post/struct i))])
 )
 
-(define (LD1/s/Post->int l)
-  (match-define (LD1/s/Post q l r rm opcode s size rn rt) l)
+(define (LD1/s/Post->int ld1)
+  (match-define (LD1/s/Post q l r rm opcode s size rn rt) ld1)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1a 23)
@@ -122,8 +122,8 @@
   [else (apply LD1/m (int->LD1/m/struct i))])
 )
 
-(define (LD1/m->int l)
-  (match-define (LD1/m q l opcode size rn rt) l)
+(define (LD1/m->int ld1)
+  (match-define (LD1/m q l opcode size rn rt) ld1)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x18 23)
@@ -165,8 +165,8 @@
   [else (apply LD1/m/Post (int->LD1/m/Post/struct i))])
 )
 
-(define (LD1/m/Post->int l)
-  (match-define (LD1/m/Post q l rm opcode size rn rt) l)
+(define (LD1/m/Post->int ld1)
+  (match-define (LD1/m/Post q l rm opcode size rn rt) ld1)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x19 23)
@@ -203,8 +203,8 @@
   [else (apply LD2/s (int->LD2/s/struct i))])
 )
 
-(define (LD2/s->int l)
-  (match-define (LD2/s q l r o2 opcode s size rn rt) l)
+(define (LD2/s->int ld2)
+  (match-define (LD2/s q l r o2 opcode s size rn rt) ld2)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1a 23)
@@ -241,8 +241,8 @@
   [else (apply LD2/s/Post (int->LD2/s/Post/struct i))])
 )
 
-(define (LD2/s/Post->int l)
-  (match-define (LD2/s/Post q l r rm opcode s size rn rt) l)
+(define (LD2/s/Post->int ld2)
+  (match-define (LD2/s/Post q l r rm opcode s size rn rt) ld2)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1b 23)
@@ -279,8 +279,8 @@
   [else (apply LD2/m (int->LD2/m/struct i))])
 )
 
-(define (LD2/m->int l)
-  (match-define (LD2/m q l opcode size rn rt) l)
+(define (LD2/m->int ld2)
+  (match-define (LD2/m q l opcode size rn rt) ld2)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x18 23)
@@ -314,8 +314,8 @@
   [else (apply LD2/m/Post (int->LD2/m/Post/struct i))])
 )
 
-(define (LD2/m/Post->int l)
-  (match-define (LD2/m/Post q l rm opcode size rn rt) l)
+(define (LD2/m/Post->int ld2)
+  (match-define (LD2/m/Post q l rm opcode size rn rt) ld2)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x19 23)
@@ -352,8 +352,8 @@
   [else (apply LD3/s (int->LD3/s/struct i))])
 )
 
-(define (LD3/s->int l)
-  (match-define (LD3/s q l r o2 opcode s size rn rt) l)
+(define (LD3/s->int ld3)
+  (match-define (LD3/s q l r o2 opcode s size rn rt) ld3)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1a 23)
@@ -390,8 +390,8 @@
   [else (apply LD3/s/Post (int->LD3/s/Post/struct i))])
 )
 
-(define (LD3/s/Post->int l)
-  (match-define (LD3/s/Post q l r rm opcode s size rn rt) l)
+(define (LD3/s/Post->int ld3)
+  (match-define (LD3/s/Post q l r rm opcode s size rn rt) ld3)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1b 23)
@@ -428,8 +428,8 @@
   [else (apply LD3/m (int->LD3/m/struct i))])
 )
 
-(define (LD3/m->int l)
-  (match-define (LD3/m q l opcode size rn rt) l)
+(define (LD3/m->int ld3)
+  (match-define (LD3/m q l opcode size rn rt) ld3)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x18 23)
@@ -463,8 +463,8 @@
   [else (apply LD3/m/Post (int->LD3/m/Post/struct i))])
 )
 
-(define (LD3/m/Post->int l)
-  (match-define (LD3/m/Post q l rm opcode size rn rt) l)
+(define (LD3/m/Post->int ld3)
+  (match-define (LD3/m/Post q l rm opcode size rn rt) ld3)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x19 23)
