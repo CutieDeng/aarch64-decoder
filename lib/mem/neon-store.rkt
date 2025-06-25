@@ -26,8 +26,8 @@
   [else (apply STR/NEON (int->STR/NEON/struct i))])
 )
 
-(define (STR/NEON->int l)
-  (match-define (STR/NEON size opc rm option s rn rt) l)
+(define (STR/NEON->int str)
+  (match-define (STR/NEON size opc rm option s rn rt) str)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -72,8 +72,8 @@
   [else (apply STR/NEON/Post (int->STR/NEON/Post/struct i))])
 )
 
-(define (STR/NEON/Post->int l)
-  (match-define (STR/NEON/Post size opc imm9 rn rt) l)
+(define (STR/NEON/Post->int str)
+  (match-define (STR/NEON/Post size opc imm9 rn rt) str)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -109,8 +109,8 @@
   [else (apply STR/NEON/Pre (int->STR/NEON/Pre/struct i))])
 )
 
-(define (STR/NEON/Pre->int l)
-  (match-define (STR/NEON/Pre size opc imm9 rn rt) l)
+(define (STR/NEON/Pre->int str)
+  (match-define (STR/NEON/Pre size opc imm9 rn rt) str)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -151,8 +151,8 @@
   [else (apply STR/NEON/Unsigned (int->STR/NEON/Unsigned/struct i))])
 )
 
-(define (STR/NEON/Unsigned->int l)
-  (match-define (STR/NEON/Unsigned size opc imm12 rn rt) l)
+(define (STR/NEON/Unsigned->int str)
+  (match-define (STR/NEON/Unsigned size opc imm12 rn rt) str)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -194,8 +194,8 @@
   [else (apply STUR/NEON (int->STUR/NEON/struct i))])
 )
 
-(define (STUR/NEON->int l)
-  (match-define (STUR/NEON size opc imm9 rn rt) l)
+(define (STUR/NEON->int str)
+  (match-define (STUR/NEON size opc imm9 rn rt) str)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -235,8 +235,8 @@
   [else (apply STP/NEON/Post (int->STP/NEON/Post/struct i))])
 )
 
-(define (STP/NEON/Post->int l)
-  (match-define (STP/NEON/Post opc l imm7 rt2 rn rt) l)
+(define (STP/NEON/Post->int str)
+  (match-define (STP/NEON/Post opc l imm7 rt2 rn rt) str)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -271,8 +271,8 @@
   [else (apply STP/NEON/Pre (int->STP/NEON/Pre/struct i))])
 )
 
-(define (STP/NEON/Pre->int l)
-  (match-define (STP/NEON/Pre opc l imm7 rt2 rn rt) l)
+(define (STP/NEON/Pre->int str)
+  (match-define (STP/NEON/Pre opc l imm7 rt2 rn rt) str)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -307,8 +307,8 @@
   [else (apply STP/NEON/Signed (int->STP/NEON/Signed/struct i))])
 )
 
-(define (STP/NEON/Signed->int l)
-  (match-define (STP/NEON/Signed opc l imm7 rt2 rn rt) l)
+(define (STP/NEON/Signed->int str)
+  (match-define (STP/NEON/Signed opc l imm7 rt2 rn rt) str)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -343,8 +343,8 @@
   [else (apply STNP/NEON (int->STNP/NEON/struct i))])
 )
 
-(define (STNP/NEON->int l)
-  (match-define (STNP/NEON opc l imm7 rt2 rn rt) l)
+(define (STNP/NEON->int str)
+  (match-define (STNP/NEON opc l imm7 rt2 rn rt) str)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
