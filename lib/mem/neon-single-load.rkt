@@ -159,8 +159,8 @@
   [else (apply LD2R/Post (int->LD2R/Post/struct i))])
 )
 
-(define (LD2R/Post->int ld1)
-  (match-define (LD2R/Post q l r rm opcode s size rn rt) ld1)
+(define (LD2R/Post->int ld2)
+  (match-define (LD2R/Post q l r rm opcode s size rn rt) ld2)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1b 23)
@@ -224,3 +224,42 @@
 )
 
 (provide (struct-out LD3R))
+
+(define int->LD3R/Post/struct int->LD1R/Post/struct)
+
+(define (int->LD3R/Post i)
+  (cond [(nand
+    (equal? (bitwise-bit-field i 31 32) 0)
+    (equal? (bitwise-bit-field i 23 30) #x1b)
+    (equal? (bitwise-bit-field i 22 23) 1)
+    (equal? (bitwise-bit-field i 21 22) 0)
+    (equal? (bitwise-bit-field i 13 16) #x7)
+    (equal? (bitwise-bit-field i 12 13) 0)
+  ) #f]
+  [else (apply LD3R/Post (int->LD3R/Post/struct i))])
+)
+
+(define (LD3R/Post->int ld3)
+  (match-define (LD3R/Post q l r rm opcode s size rn rt) ld3)
+  (bitwise-ior
+    (arithmetic-shift q 30)
+    (arithmetic-shift #x1b 23)
+    (arithmetic-shift l 22)
+    (arithmetic-shift r 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift opcode 13)
+    (arithmetic-shift s 12)
+    (arithmetic-shift size 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LD3R/Post (q l r rm opcode s size rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int LD3R/Post->int
+  #:property prop:try-from-int int->LD3R/Post
+)
+
+(provide (struct-out LD3R/Post))
