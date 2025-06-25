@@ -105,17 +105,7 @@
 
 (provide (struct-out LD1R/Post))
 
-(define (int->LD2R/struct i)
-  (list (bitwise-bit-field i 30 31)
-    (bitwise-bit-field i 22 23)
-    (bitwise-bit-field i 21 22)
-    (bitwise-bit-field i 16 17)
-    (bitwise-bit-field i 13 16)
-    (bitwise-bit-field i 12 13)
-    (bitwise-bit-field i 10 12)
-    (bitwise-bit-field i 5 10)
-    (bitwise-bit-field i 0 5))
-)
+(define int->LD2R/struct int->LD1R/struct)
 
 (define (int->LD2R i)
   (cond [(nand
@@ -131,8 +121,8 @@
   [else (apply LD2R (int->LD2R/struct i))])
 )
 
-(define (LD2R->int ld1)
-  (match-define (LD2R q l r o2 opcode s size rn rt) ld1)
+(define (LD2R->int ld2)
+  (match-define (LD2R q l r o2 opcode s size rn rt) ld2)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1a 23)
