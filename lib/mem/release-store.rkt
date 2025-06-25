@@ -27,8 +27,8 @@
   [else (apply STLR (int->STLR/struct i))])
 )
 
-(define (STLR->int l)
-  (match-define (STLR size l rs o0 rt2 rn rt) l)
+(define (STLR->int stlr)
+  (match-define (STLR size l rs o0 rt2 rn rt) stlr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -68,8 +68,8 @@
   [else (apply STLR/Pre (int->STLR/Pre/struct i))])
 )
 
-(define (STLR/Pre->int l)
-  (match-define (STLR/Pre size rn rt) l)
+(define (STLR/Pre->int stlr)
+  (match-define (STLR/Pre size rn rt) stlr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x3 27)
@@ -104,8 +104,8 @@
   [else (apply STLRB (int->STLRB/struct i))])
 )
 
-(define (STLRB->int l)
-  (match-define (STLRB size l rs o0 rt2 rn rt) l)
+(define (STLRB->int stlr)
+  (match-define (STLRB size l rs o0 rt2 rn rt) stlr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -143,8 +143,8 @@
   [else (apply STLRH (int->STLRH/struct i))])
 )
 
-(define (STLRH->int l)
-  (match-define (STLRH size l rs o0 rt2 rn rt) l)
+(define (STLRH->int stlr)
+  (match-define (STLRH size l rs o0 rt2 rn rt) stlr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x8 24)
@@ -185,8 +185,8 @@
   [else (apply STLUR (int->STLUR/struct i))])
 )
 
-(define (STLUR->int l)
-  (match-define (STLUR size opc imm9 rn rt) l)
+(define (STLUR->int stlr)
+  (match-define (STLUR size opc imm9 rn rt) stlr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -218,8 +218,8 @@
   [else (apply STLURB (int->STLURB/struct i))])
 )
 
-(define (STLURB->int l)
-  (match-define (STLURB size opc imm9 rn rt) l)
+(define (STLURB->int stlr)
+  (match-define (STLURB size opc imm9 rn rt) stlr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
@@ -251,8 +251,8 @@
   [else (apply STLURH (int->STLURH/struct i))])
 )
 
-(define (STLURH->int l)
-  (match-define (STLURH size opc imm9 rn rt) l)
+(define (STLURH->int stlr)
+  (match-define (STLURH size opc imm9 rn rt) stlr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x19 24)
