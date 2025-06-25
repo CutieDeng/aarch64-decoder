@@ -501,8 +501,8 @@
   [else (apply LD4/s (int->LD4/s/struct i))])
 )
 
-(define (LD4/s->int ld2)
-  (match-define (LD4/s q l r o2 opcode s size rn rt) ld2)
+(define (LD4/s->int ld4)
+  (match-define (LD4/s q l r o2 opcode s size rn rt) ld4)
   (bitwise-ior
     (arithmetic-shift q 30)
     (arithmetic-shift #x1a 23)
