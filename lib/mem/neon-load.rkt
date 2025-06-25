@@ -26,8 +26,8 @@
   [else (apply LDR/NEON (int->LDR/NEON/struct i))])
 )
 
-(define (LDR/NEON->int l)
-  (match-define (LDR/NEON size opc rm option s rn rt) l)
+(define (LDR/NEON->int ldr)
+  (match-define (LDR/NEON size opc rm option s rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -71,8 +71,8 @@
   [else (apply LDR/NEON/Post (int->LDR/NEON/Post/struct i))])
 )
 
-(define (LDR/NEON/Post->int l)
-  (match-define (LDR/NEON/Post size opc imm9 rn rt) l)
+(define (LDR/NEON/Post->int ldr)
+  (match-define (LDR/NEON/Post size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -108,8 +108,8 @@
   [else (apply LDR/NEON/Pre (int->LDR/NEON/Pre/struct i))])
 )
 
-(define (LDR/NEON/Pre->int l)
-  (match-define (LDR/NEON/Pre size opc imm9 rn rt) l)
+(define (LDR/NEON/Pre->int ldr)
+  (match-define (LDR/NEON/Pre size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -150,8 +150,8 @@
   [else (apply LDR/NEON/Unsigned (int->LDR/NEON/Unsigned/struct i))])
 )
 
-(define (LDR/NEON/Unsigned->int l)
-  (match-define (LDR/NEON/Unsigned size opc imm12 rn rt) l)
+(define (LDR/NEON/Unsigned->int ldr)
+  (match-define (LDR/NEON/Unsigned size opc imm12 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -188,8 +188,8 @@
   [else (apply LDR/NEON/l (int->LDR/NEON/l/struct i))])
 )
 
-(define (LDR/NEON/l->int l)
-  (match-define (LDR/NEON/l opc imm19 rt) l)
+(define (LDR/NEON/l->int ldr)
+  (match-define (LDR/NEON/l opc imm19 rt) ldr)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x3 27)
@@ -228,8 +228,8 @@
   [else (apply LDUR/NEON (int->LDUR/NEON/struct i))])
 )
 
-(define (LDUR/NEON->int l)
-  (match-define (LDUR/NEON size opc imm9 rn rt) l)
+(define (LDUR/NEON->int ldr)
+  (match-define (LDUR/NEON size opc imm9 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift size 30)
     (arithmetic-shift #x7 27)
@@ -269,8 +269,8 @@
   [else (apply LDP/NEON/Post (int->LDP/NEON/Post/struct i))])
 )
 
-(define (LDP/NEON/Post->int l)
-  (match-define (LDP/NEON/Post opc l imm7 rt2 rn rt) l)
+(define (LDP/NEON/Post->int ldr)
+  (match-define (LDP/NEON/Post opc l imm7 rt2 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -305,8 +305,8 @@
   [else (apply LDP/NEON/Pre (int->LDP/NEON/Pre/struct i))])
 )
 
-(define (LDP/NEON/Pre->int l)
-  (match-define (LDP/NEON/Pre opc l imm7 rt2 rn rt) l)
+(define (LDP/NEON/Pre->int ldr)
+  (match-define (LDP/NEON/Pre opc l imm7 rt2 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -341,8 +341,8 @@
   [else (apply LDP/NEON/Signed (int->LDP/NEON/Signed/struct i))])
 )
 
-(define (LDP/NEON/Signed->int l)
-  (match-define (LDP/NEON/Signed opc l imm7 rt2 rn rt) l)
+(define (LDP/NEON/Signed->int ldr)
+  (match-define (LDP/NEON/Signed opc l imm7 rt2 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
@@ -377,8 +377,8 @@
   [else (apply LDNP/NEON (int->LDNP/NEON/struct i))])
 )
 
-(define (LDNP/NEON->int l)
-  (match-define (LDNP/NEON opc l imm7 rt2 rn rt) l)
+(define (LDNP/NEON->int ldr)
+  (match-define (LDNP/NEON opc l imm7 rt2 rn rt) ldr)
   (bitwise-ior
     (arithmetic-shift opc 30)
     (arithmetic-shift #x5 27)
