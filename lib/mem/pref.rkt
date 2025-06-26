@@ -199,7 +199,7 @@
 
 (struct RPRFM (size opc rm option s rn rt)
   #:transparent
-  #:property prop:in-feature #hash()
+  #:property prop:in-feature #hash((FEAT_RPRFM . #t))
   #:property prop:into-int RPRFM->int
   #:property prop:try-from-int int->RPRFM
 )
