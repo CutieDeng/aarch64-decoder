@@ -125,3 +125,43 @@
 )
 
 (provide (struct-out PRFM/l))
+
+(define (int->PRFUM/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 22 24)
+    (bitwise-bit-field i 12 21)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->PRFUM i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) #x3)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) #x0)
+    (equal? (bitwise-bit-field i 22 24) #x2)
+    (equal? (bitwise-bit-field i 21 22) #x1)
+  ) #f]
+  [else (apply PRFUM (int->PRFUM/struct i))])
+)
+
+(define (PRFUM->int prfm)
+  (match-define (PRFUM size opc imm9 rn rt) prfm)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct PRFUM (size opc imm9 rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int PRFUM->int
+  #:property prop:try-from-int int->PRFUM
+)
+
+(provide (struct-out PRFUM))
