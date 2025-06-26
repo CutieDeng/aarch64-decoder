@@ -168,7 +168,7 @@
 
 (struct ST64BV0 (rs rn rt)
   #:transparent
-  #:property prop:in-feature #hash((FEAT_LS64 . #t))
+  #:property prop:in-feature #hash((FEAT_LS64_ACCDATA . #t))
   #:property prop:into-int ST64BV0->int
   #:property prop:try-from-int int->ST64BV0
 )
