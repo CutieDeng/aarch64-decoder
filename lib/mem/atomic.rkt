@@ -928,3 +928,120 @@
 )
 
 (provide (struct-out LDUMAXH))
+
+(define int->LDUMIN/struct int->LDADD/struct)
+
+(define (int->LDUMIN i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x7)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDUMIN (int->LDUMIN/struct i))])
+)
+
+(define (LDUMIN->int ldadd)
+  (match-define (LDUMIN size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDUMIN (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDUMIN->int
+  #:property prop:try-from-int int->LDUMIN
+)
+
+(provide (struct-out LDUMIN))
+
+(define int->LDUMINB/struct int->LDUMIN/struct)
+
+(define (int->LDUMINB i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x7)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDUMINB (int->LDUMINB/struct i))])
+)
+
+(define (LDUMINB->int ldadd)
+  (match-define (LDUMINB size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDUMINB (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDUMINB->int
+  #:property prop:try-from-int int->LDUMINB
+)
+
+(provide (struct-out LDUMINB))
+
+(define int->LDUMINH/struct int->LDUMIN/struct)
+
+(define (int->LDUMINH i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x7)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDUMINH (int->LDUMINH/struct i))])
+)
+
+(define (LDUMINH->int ldadd)
+  (match-define (LDUMINH size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDUMINH (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDUMINH->int
+  #:property prop:try-from-int int->LDUMINH
+)
+
+(provide (struct-out LDUMINH))
