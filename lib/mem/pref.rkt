@@ -91,3 +91,37 @@
 )
 
 (provide (struct-out PRFM/i))
+
+(define (int->PRFM/l/struct i)
+  (list (bitwise-bit-field i 30 32)
+    (bitwise-bit-field i 5 24)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->PRFM/l i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) #x3)
+    (equal? (bitwise-bit-field i 27 30) #x3)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) #x0)
+  ) #f]
+  [else (apply PRFM/l (int->PRFM/l/struct i))])
+)
+
+(define (PRFM/l->int prfm)
+  (match-define (PRFM/l opc imm19 rt) prfm)
+  (bitwise-ior
+    (arithmetic-shift opc 30)
+    (arithmetic-shift #x3 27)
+    (arithmetic-shift imm19 5)
+    rt
+  )
+)
+
+(struct PRFM/l (opc imm19 rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int PRFM/l->int
+  #:property prop:try-from-int int->PRFM/l
+)
+
+(provide (struct-out PRFM/l))
