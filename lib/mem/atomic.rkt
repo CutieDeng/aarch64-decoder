@@ -288,7 +288,7 @@
 
 (struct LDCLRP (s a r rt2 o3 opc rn rt)
   #:transparent
-  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:in-feature #hash((FEAT_LSE128 . #t))
   #:property prop:into-int LDCLRP->int
   #:property prop:try-from-int int->LDCLRP
 )
