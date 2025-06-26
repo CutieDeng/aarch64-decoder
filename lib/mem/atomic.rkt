@@ -128,3 +128,120 @@
 )
 
 (provide (struct-out LDADDH))
+
+(define int->LDCLR/struct int->LDADD/struct)
+
+(define (int->LDCLR i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) 1)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDCLR (int->LDCLR/struct i))])
+)
+
+(define (LDCLR->int ldadd)
+  (match-define (LDCLR size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDCLR (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDCLR->int
+  #:property prop:try-from-int int->LDCLR
+)
+
+(provide (struct-out LDCLR))
+
+(define int->LDCLRB/struct int->LDCLR/struct)
+
+(define (int->LDCLRB i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) 1)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDCLRB (int->LDCLRB/struct i))])
+)
+
+(define (LDCLRB->int ldadd)
+  (match-define (LDCLRB size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDCLRB (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDCLRB->int
+  #:property prop:try-from-int int->LDCLRB
+)
+
+(provide (struct-out LDCLRB))
+
+(define int->LDCLRH/struct int->LDCLR/struct)
+
+(define (int->LDCLRH i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) 1)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDCLRH (int->LDCLRH/struct i))])
+)
+
+(define (LDCLRH->int ldadd)
+  (match-define (LDCLRH size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDCLRH (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDCLRH->int
+  #:property prop:try-from-int int->LDCLRH
+)
+
+(provide (struct-out LDCLRH))
