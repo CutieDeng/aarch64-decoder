@@ -165,3 +165,43 @@
 )
 
 (provide (struct-out PRFUM))
+
+(define int->RPRFM/struct int->PRFM/i/struct)
+
+(define (int->RPRFM i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) #x3)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 22 24) #x2)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 14 15) #x1)
+    (equal? (bitwise-bit-field i 10 12) #x2)
+    (equal? (bitwise-bit-field i 3 5) #x3)
+  ) #f]
+  [else (apply RPRFM (int->RPRFM/struct i))])
+)
+
+(define (RPRFM->int prfm)
+  (match-define (RPRFM size opc rm option s rn rt) prfm)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift opc 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift option 13)
+    (arithmetic-shift s 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct RPRFM (size opc rm option s rn rt)
+  #:transparent
+  #:property prop:in-feature #hash()
+  #:property prop:into-int RPRFM->int
+  #:property prop:try-from-int int->RPRFM
+)
+
+(provide (struct-out RPRFM))
