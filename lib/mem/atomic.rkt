@@ -577,3 +577,120 @@
 )
 
 (provide (struct-out LDSETP))
+
+(define int->LDSMAX/struct int->LDADD/struct)
+
+(define (int->LDSMAX i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x4)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDSMAX (int->LDSMAX/struct i))])
+)
+
+(define (LDSMAX->int ldadd)
+  (match-define (LDSMAX size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDSMAX (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDSMAX->int
+  #:property prop:try-from-int int->LDSMAX
+)
+
+(provide (struct-out LDSMAX))
+
+(define int->LDSMAXB/struct int->LDSMAX/struct)
+
+(define (int->LDSMAXB i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x4)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDSMAXB (int->LDSMAXB/struct i))])
+)
+
+(define (LDSMAXB->int ldadd)
+  (match-define (LDSMAXB size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDSMAXB (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDSMAXB->int
+  #:property prop:try-from-int int->LDSMAXB
+)
+
+(provide (struct-out LDSMAXB))
+
+(define int->LDSMAXH/struct int->LDSMAX/struct)
+
+(define (int->LDSMAXH i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x4)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDSMAXH (int->LDSMAXH/struct i))])
+)
+
+(define (LDSMAXH->int ldadd)
+  (match-define (LDSMAXH size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDSMAXH (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDSMAXH->int
+  #:property prop:try-from-int int->LDSMAXH
+)
+
+(provide (struct-out LDSMAXH))
