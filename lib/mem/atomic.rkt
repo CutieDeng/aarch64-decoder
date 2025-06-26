@@ -294,3 +294,120 @@
 )
 
 (provide (struct-out LDCLRP))
+
+(define int->LDEOR/struct int->LDADD/struct)
+
+(define (int->LDEOR i)
+  (cond [(nand (equal? (bitwise-bit-field i 31 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x2)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDEOR (int->LDEOR/struct i))])
+)
+
+(define (LDEOR->int ldadd)
+  (match-define (LDEOR size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDEOR (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDEOR->int
+  #:property prop:try-from-int int->LDEOR
+)
+
+(provide (struct-out LDEOR))
+
+(define int->LDEORB/struct int->LDEOR/struct)
+
+(define (int->LDEORB i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x2)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDEORB (int->LDEORB/struct i))])
+)
+
+(define (LDEORB->int ldadd)
+  (match-define (LDEORB size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDEORB (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDEORB->int
+  #:property prop:try-from-int int->LDEORB
+)
+
+(provide (struct-out LDEORB))
+
+(define int->LDEORH/struct int->LDEOR/struct)
+
+(define (int->LDEORH i)
+  (cond [(nand (equal? (bitwise-bit-field i 30 32) 1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) 0)
+    (equal? (bitwise-bit-field i 24 26) 0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 0)
+    (equal? (bitwise-bit-field i 12 15) #x2)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply LDEORH (int->LDEORH/struct i))])
+)
+
+(define (LDEORH->int ldadd)
+  (match-define (LDEORH size a r rs opc rn rt) ldadd)
+  (bitwise-ior
+    (arithmetic-shift size 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift 1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct LDEORH (size a r rs opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_LSE . #t))
+  #:property prop:into-int LDEORH->int
+  #:property prop:try-from-int int->LDEORH
+)
+
+(provide (struct-out LDEORH))
