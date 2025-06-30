@@ -306,6 +306,43 @@
 
 (provide (struct-out RCWSSWP))
 
+(define int->RCWCASP/struct int->RCWCAS/struct)
+
+(define (int->RCWCASP i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x0)
+    (equal? (bitwise-bit-field i 24 30) #x19)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 10 16) #x3)
+  ) #f]
+  [else (apply RCWCASP (int->RCWCASP/struct i))])
+)
+
+(define (RCWCASP->int rcw)
+  (match-define (RCWCASP s a r rs rn rt) rcw)
+  (bitwise-ior
+    (arithmetic-shift s 30)
+    (arithmetic-shift #x19 24)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift #x2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct RCWCASP (s a r rs rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_THE . #t) (FEAT_D128 . #t))
+  #:property prop:into-int RCWCASP->int
+  #:property prop:try-from-int int->RCWCASP
+)
+
+(provide (struct-out RCWCASP))
+
 (define int->RCWSCASP/struct int->RCWCAS/struct)
 
 (define (int->RCWSCASP i)
