@@ -10,7 +10,6 @@
     (bitwise-bit-field i 23 24)
     (bitwise-bit-field i 22 23)
     (bitwise-bit-field i 16 21)
-    (bitwise-bit-field i 15 16)
     (bitwise-bit-field i 5 10)
     (bitwise-bit-field i 0 5))
 )
