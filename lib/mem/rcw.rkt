@@ -180,6 +180,58 @@
 
 (provide (struct-out RCWSCLR))
 
+(define (int->RCWSET/struct i)
+  (list
+    (bitwise-bit-field i 30 31)
+    (bitwise-bit-field i 23 24)
+    (bitwise-bit-field i 22 23)
+    (bitwise-bit-field i 16 21)
+    (bitwise-bit-field i 15 16)
+    (bitwise-bit-field i 12 15)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->RCWSET i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x0)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) #x0)
+    (equal? (bitwise-bit-field i 24 26) #x0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 1)
+    (equal? (bitwise-bit-field i 12 15) #x3)
+    (equal? (bitwise-bit-field i 10 12) #x0)
+  ) #f]
+  [else (apply RCWSET (int->RCWSET/struct i))])
+)
+
+(define (RCWSET->int rcw)
+  (match-define (RCWSET s a r rs o3 opc rn rt) rcw)
+  (bitwise-ior
+    (arithmetic-shift s 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift o3 15)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct RCWSET (s a r rs o3 opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_THE . #t))
+  #:property prop:into-int RCWSET->int
+  #:property prop:try-from-int int->RCWSET
+)
+
+(provide (struct-out RCWSET))
+
 (define int->RCWSCASP/struct int->RCWCAS/struct)
 
 (define (int->RCWSCASP i)
