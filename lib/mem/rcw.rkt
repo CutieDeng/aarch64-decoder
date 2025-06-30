@@ -264,6 +264,48 @@
 
 (provide (struct-out RCWSWP))
 
+(define int->RCWSSWP/struct int->RCWCLR/struct)
+
+(define (int->RCWSSWP i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x1)
+    (equal? (bitwise-bit-field i 27 30) #x7)
+    (equal? (bitwise-bit-field i 26 27) #x0)
+    (equal? (bitwise-bit-field i 24 26) #x0)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) 1)
+    (equal? (bitwise-bit-field i 12 15) #x2)
+    (equal? (bitwise-bit-field i 10 12) #x0)
+  ) #f]
+  [else (apply RCWSSWP (int->RCWSSWP/struct i))])
+)
+
+(define (RCWSSWP->int rcw)
+  (match-define (RCWSSWP s a r rs o3 opc rn rt) rcw)
+  (bitwise-ior
+    (arithmetic-shift s 30)
+    (arithmetic-shift #x7 27)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift o3 15)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct RCWSSWP (s a r rs o3 opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_THE . #t))
+  #:property prop:into-int RCWSSWP->int
+  #:property prop:try-from-int int->RCWSSWP
+)
+
+(provide (struct-out RCWSSWP))
+
 (define int->RCWSCASP/struct int->RCWCAS/struct)
 
 (define (int->RCWSCASP i)
