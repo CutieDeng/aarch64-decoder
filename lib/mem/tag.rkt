@@ -553,11 +553,7 @@
 
 (provide (struct-out LDGM))
 
-(define (int->STGM/struct i)
-  (list
-    (bitwise-bit-field i 5 10)
-    (bitwise-bit-field i 0 5))
-)
+(define int->STGM/struct int->LDGM/struct)
 
 (define (int->STGM i)
   (cond [(nand 
@@ -599,3 +595,45 @@
 )
 
 (provide (struct-out STGM))
+
+(define int->STZGM/struct int->LDGM/struct)
+
+(define (int->STZGM i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) #xd9)
+    (equal? (bitwise-bit-field i 23 24) #x0)
+    (equal? (bitwise-bit-field i 22 23) #x0)
+    (equal? (bitwise-bit-field i 21 22) #x1)
+    (equal? (bitwise-bit-field i 20 21) #x0)
+    (equal? (bitwise-bit-field i 19 20) #x0)
+    (equal? (bitwise-bit-field i 18 19) #x0)
+    (equal? (bitwise-bit-field i 17 18) #x0)
+    (equal? (bitwise-bit-field i 16 17) #x0)
+    (equal? (bitwise-bit-field i 15 16) #x0)
+    (equal? (bitwise-bit-field i 14 15) #x0)
+    (equal? (bitwise-bit-field i 13 14) #x0)
+    (equal? (bitwise-bit-field i 12 13) #x0)
+    (equal? (bitwise-bit-field i 11 12) #x0)
+    (equal? (bitwise-bit-field i 10 11) #x0)
+  ) #f]
+  [else (apply STZGM (int->STZGM/struct i))])
+)
+
+(define (STZGM->int rcw)
+  (match-define (STZGM xn xt) rcw)
+  (bitwise-ior
+    (arithmetic-shift #xd9 24)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift xn 5)
+    xt
+  )
+)
+
+(struct STZGM (xn xt)
+  #:transparent
+  #:property prop:in-feature 'FEAT_MTE2
+  #:property prop:into-int STZGM->int
+  #:property prop:try-from-int int->STZGM
+)
+
+(provide (struct-out STZGM))
