@@ -206,3 +206,38 @@
 )
 
 (provide (struct-out SUBPS))
+
+(define int->STG/struct int->GMI/struct)
+
+(define (int->STG i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) #xd9)
+    (equal? (bitwise-bit-field i 23 24) #x0)
+    (equal? (bitwise-bit-field i 22 23) #x0)
+    (equal? (bitwise-bit-field i 21 22) #x1)
+    (equal? (bitwise-bit-field i 11 12) #x0)
+    (equal? (bitwise-bit-field i 10 11) #x1)
+  ) #f]
+  [else (apply STG (int->STG/struct i))])
+)
+
+(define (STG->int rcw)
+  (match-define (STG imm9 xn xt) rcw)
+  (bitwise-ior
+    (arithmetic-shift #xd9 24)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x1 10)
+    (arithmetic-shift xn 5)
+    xt
+  )
+)
+
+(struct STG (imm9 xn xt)
+  #:transparent
+  #:property prop:in-feature 'FEAT_MTE
+  #:property prop:into-int STG->int
+  #:property prop:try-from-int int->STG
+)
+
+(provide (struct-out STG))
