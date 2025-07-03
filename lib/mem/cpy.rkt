@@ -239,3 +239,41 @@
 )
 
 (provide (struct-out CPYFPRTRN))
+
+(define int->CPYFPRTWN/struct int->CPYFP/struct)
+
+(define (int->CPYFPRTWN i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 27 30) #x3)
+    (equal? (bitwise-bit-field i 26 27) #x0)
+    (equal? (bitwise-bit-field i 24 26) #x1)
+    (equal? (bitwise-bit-field i 21 22) #x0)
+    (equal? (bitwise-bit-field i 12 16) #x6)
+    (equal? (bitwise-bit-field i 10 12) #x1)
+  ) #f]
+  [else (apply CPYFPRTWN (int->CPYFPRTWN/struct i))])
+)
+
+(define (CPYFPRTWN->int rcw)
+  (match-define (CPYFPRTWN sz op1 rs op2 rn rd) rcw)
+  (bitwise-ior
+    (arithmetic-shift sz 30)
+    (arithmetic-shift #x3 27)
+    (arithmetic-shift #x1 24)
+    (arithmetic-shift op1 22)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift op2 12)
+    (arithmetic-shift #x1 10)
+    (arithmetic-shift rn 5)
+    rd
+  )
+)
+
+(struct CPYFPRTWN (sz op1 rs op2 rn rd)
+  #:transparent
+  #:property prop:in-feature 'FEAT_MOPS
+  #:property prop:into-int CPYFPRTWN->int
+  #:property prop:try-from-int int->CPYFPRTWN
+)
+
+(provide (struct-out CPYFPRTWN))
