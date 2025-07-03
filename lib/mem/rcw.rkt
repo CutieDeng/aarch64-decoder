@@ -379,3 +379,82 @@
 )
 
 (provide (struct-out RCWSCASP))
+
+(define int->RCWCLRP/struct int->RCWCLR/struct)
+
+(define (int->RCWCLRP i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x0)
+    (equal? (bitwise-bit-field i 24 30) #x19)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) #x1)
+    (equal? (bitwise-bit-field i 12 15) #x1)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply RCWCLRP (int->RCWCLRP/struct i))])
+)
+
+(define (RCWCLRP->int rcw)
+  (match-define (RCWCLRP s a r rt2 o3 opc rn rt) rcw)
+  (bitwise-ior
+    (arithmetic-shift s 30)
+    (arithmetic-shift #x19 24)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rt2 16)
+    (arithmetic-shift o3 15)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct RCWCLRP (s a r rt2 o3 opc rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_THE . #t) (FEAT_D128 . #t))
+  #:property prop:into-int RCWCLRP->int
+  #:property prop:try-from-int int->RCWCLRP
+)
+
+(provide (struct-out RCWCLRP))
+
+(define int->RCWSCLRP/struct int->RCWCLR/struct)
+
+(define (int->RCWSCLRP i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x1)
+    (equal? (bitwise-bit-field i 24 30) #x19)
+    (equal? (bitwise-bit-field i 21 22) 1)
+    (equal? (bitwise-bit-field i 15 16) #x1)
+    (equal? (bitwise-bit-field i 12 15) #x1)
+    (equal? (bitwise-bit-field i 10 12) 0)
+  ) #f]
+  [else (apply RCWSCLRP (int->RCWSCLRP/struct i))])
+)
+
+(define (RCWSCLRP->int rcw)
+  (match-define (RCWSCLRP s a r rs rn rt) rcw)
+  (bitwise-ior
+    (arithmetic-shift s 30)
+    (arithmetic-shift #x19 24)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rs 16)
+    (arithmetic-shift #x2 10)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct RCWSCLRP (s a r rs rn rt)
+  #:transparent
+  #:property prop:in-feature #hash((FEAT_THE . #t) (FEAT_D128 . #t))
+  #:property prop:into-int RCWSCLRP->int
+  #:property prop:try-from-int int->RCWSCLRP
+)
+
+(provide (struct-out RCWSCLRP))
