@@ -31,12 +31,11 @@
   (bitwise-ior
     (arithmetic-shift sz 30)
     (arithmetic-shift #x3 27)
-    (arithmetic-shift #x0 26)
     (arithmetic-shift #x1 24)
     (arithmetic-shift op1 22)
-    (arithmetic-shift #x0 21)
     (arithmetic-shift rs 16)
-    (arithmetic-shift op2 10)
+    (arithmetic-shift op2 12)
+    (arithmetic-shift #x1 10)
     (arithmetic-shift rn 5)
     rd
   )
