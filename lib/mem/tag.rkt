@@ -207,7 +207,13 @@
 
 (provide (struct-out SUBPS))
 
-(define int->STG/struct int->GMI/struct)
+(define (int->STG/struct i)
+  (list
+    (bitwise-bit-field i 12 21)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
 
 (define (int->STG i)
   (cond [(nand 
