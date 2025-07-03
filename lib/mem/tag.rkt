@@ -319,3 +319,40 @@
 )
 
 (provide (struct-out ST2G))
+
+(define int->STZ2G/struct int->STG/struct)
+
+(define (int->STZ2G i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 24 32) #xd9)
+    (equal? (bitwise-bit-field i 23 24) #x1)
+    (equal? (bitwise-bit-field i 22 23) #x1)
+    (equal? (bitwise-bit-field i 21 22) #x1)
+    (equal? (bitwise-bit-field i 11 12) #x0)
+    (equal? (bitwise-bit-field i 10 11) #x1)
+  ) #f]
+  [else (apply STZ2G (int->STZ2G/struct i))])
+)
+
+(define (STZ2G->int rcw)
+  (match-define (STZ2G imm9 xn xt) rcw)
+  (bitwise-ior
+    (arithmetic-shift #xd9 24)
+    (arithmetic-shift #x1 23)
+    (arithmetic-shift #x1 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift imm9 12)
+    (arithmetic-shift #x1 10)
+    (arithmetic-shift xn 5)
+    xt
+  )
+)
+
+(struct STZ2G (imm9 xn xt)
+  #:transparent
+  #:property prop:in-feature 'FEAT_MTE
+  #:property prop:into-int STZ2G->int
+  #:property prop:try-from-int int->STZ2G
+)
+
+(provide (struct-out STZ2G))
