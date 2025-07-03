@@ -498,3 +498,43 @@
 )
 
 (provide (struct-out RCWSETP))
+
+(define int->RCWSWPP/struct int->RCWCLR/struct)
+
+(define (int->RCWSWPP i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x0)
+    (equal? (bitwise-bit-field i 24 30) #x19)
+    (equal? (bitwise-bit-field i 21 22) #x1)
+    (equal? (bitwise-bit-field i 15 16) #x1)
+    (equal? (bitwise-bit-field i 12 15) #x2)
+    (equal? (bitwise-bit-field i 10 12) #x0)
+  ) #f]
+  [else (apply RCWSWPP (int->RCWSWPP/struct i))])
+)
+
+(define (RCWSWPP->int rcw)
+  (match-define (RCWSWPP s a r rt2 o3 opc rn rt) rcw)
+  (bitwise-ior
+    (arithmetic-shift s 30)
+    (arithmetic-shift #x19 24)
+    (arithmetic-shift a 23)
+    (arithmetic-shift r 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift rt2 16)
+    (arithmetic-shift o3 15)
+    (arithmetic-shift opc 12)
+    (arithmetic-shift rn 5)
+    rt
+  )
+)
+
+(struct RCWSWPP (s a r rt2 o3 opc rn rt)
+  #:transparent
+  #:property prop:in-feature '(and FEAT_D128 FEAT_THE)
+  #:property prop:into-int RCWSWPP->int
+  #:property prop:try-from-int int->RCWSWPP
+)
+
+(provide (struct-out RCWSWPP))
