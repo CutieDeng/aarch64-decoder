@@ -356,3 +356,45 @@
 )
 
 (provide (struct-out STZ2G))
+
+(define (int->STGP/Post/struct i)
+  (list
+    (bitwise-bit-field i 15 22)
+    (bitwise-bit-field i 10 15)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->STGP/Post i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x1)
+    (equal? (bitwise-bit-field i 27 30) #x5)
+    (equal? (bitwise-bit-field i 26 27) #x0)
+    (equal? (bitwise-bit-field i 23 26) #x1)
+    (equal? (bitwise-bit-field i 22 23) #x0)
+  ) #f]
+  [else (apply STGP/Post (int->STGP/Post/struct i))])
+)
+
+(define (STGP/Post->int rcw)
+  (match-define (STGP/Post simm7 xt2 xn xt) rcw)
+  (bitwise-ior
+    (arithmetic-shift #x1 30)
+    (arithmetic-shift #x5 27)
+    (arithmetic-shift #x1 23)
+    (arithmetic-shift simm7 15)
+    (arithmetic-shift xt2 10)
+    (arithmetic-shift xn 5)
+    xt
+  )
+)
+
+(struct STGP/Post (simm7 xt2 xn xt)
+  #:transparent
+  #:property prop:in-feature 'FEAT_MTE
+  #:property prop:into-int STGP/Post->int
+  #:property prop:try-from-int int->STGP/Post
+)
+
+(provide (struct-out STGP/Post))
