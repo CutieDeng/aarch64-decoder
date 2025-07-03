@@ -492,7 +492,7 @@
 
 (struct RCWSETP (s a r rt2 o3 opc rn rt)
   #:transparent
-  #:property prop:in-feature #hash((FEAT_THE . #t))
+  #:property prop:in-feature '(and FEAT_D128 FEAT_THE)
   #:property prop:into-int RCWSETP->int
   #:property prop:try-from-int int->RCWSETP
 )
