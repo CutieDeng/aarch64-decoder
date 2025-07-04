@@ -514,7 +514,7 @@
     (equal? (bitwise-bit-field i 26 27) #x0)
     (equal? (bitwise-bit-field i 24 26) #x1)
     (equal? (bitwise-bit-field i 21 22) #x0)
-    (equal? (bitwise-bit-field i 12 16) #x1)
+    (equal? (bitwise-bit-field i 12 16) #xd)
     (equal? (bitwise-bit-field i 10 12) #x1)
   ) #f]
   [else (apply CPYFPWTN (int->CPYFPWTN/struct i))])
@@ -552,7 +552,7 @@
     (equal? (bitwise-bit-field i 26 27) #x0)
     (equal? (bitwise-bit-field i 24 26) #x1)
     (equal? (bitwise-bit-field i 21 22) #x0)
-    (equal? (bitwise-bit-field i 12 16) #x1)
+    (equal? (bitwise-bit-field i 12 16) #x9)
     (equal? (bitwise-bit-field i 10 12) #x1)
   ) #f]
   [else (apply CPYFPWTRN (int->CPYFPWTRN/struct i))])
