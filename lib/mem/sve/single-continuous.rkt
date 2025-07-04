@@ -113,3 +113,47 @@
 )
 
 (provide (struct-out LD1H))
+
+(define (int->LD1ROB/struct i)
+  (list
+    (bitwise-bit-field i 23 25)
+    (bitwise-bit-field i 21 23)
+    (bitwise-bit-field i 16 20)
+    (bitwise-bit-field i 10 13)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->LD1ROB i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) #x52)
+    (equal? (bitwise-bit-field i 23 25) #x0)
+    (equal? (bitwise-bit-field i 21 23) #x1)
+    (equal? (bitwise-bit-field i 20 21) #x0)
+    (equal? (bitwise-bit-field i 13 16) #x1)
+  ) #f]
+  [else (apply LD1ROB (int->LD1ROB/struct i))])
+)
+
+(define (LD1ROB->int ld1)
+  (match-define (LD1ROB msz ssz imm4 pg rn zt) ld1)
+  (bitwise-ior
+    (arithmetic-shift #x52 25)
+    (arithmetic-shift msz 23)
+    (arithmetic-shift ssz 21)
+    (arithmetic-shift imm4 16)
+    (arithmetic-shift #x1 13)
+    (arithmetic-shift pg 10)
+    (arithmetic-shift rn 5)
+    zt
+  )
+)
+
+(struct LD1ROB (msz ssz imm4 pg rn zt)
+  #:transparent
+  #:property prop:in-feature #f
+  #:property prop:into-int LD1ROB->int
+  #:property prop:try-from-int int->LD1ROB
+)
+
+(provide (struct-out LD1ROB))
