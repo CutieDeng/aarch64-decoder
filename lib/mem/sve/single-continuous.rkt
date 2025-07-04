@@ -45,14 +45,7 @@
 
 (provide (struct-out LD1B))
 
-(define (int->LD1D/struct i)
-  (list
-    (bitwise-bit-field i 21 24)
-    (bitwise-bit-field i 16 20)
-    (bitwise-bit-field i 10 13)
-    (bitwise-bit-field i 5 10)
-    (bitwise-bit-field i 0 5))
-)
+(define int->LD1D/struct int->LD1B/struct)
 
 (define (int->LD1D i)
   (cond [(nand 
@@ -86,14 +79,7 @@
 
 (provide (struct-out LD1D))
 
-(define (int->LD1H/struct i)
-  (list
-    (bitwise-bit-field i 21 24)
-    (bitwise-bit-field i 16 20)
-    (bitwise-bit-field i 10 13)
-    (bitwise-bit-field i 5 10)
-    (bitwise-bit-field i 0 5))
-)
+(define int->LD1H/struct int->LD1B/struct)
 
 (define (int->LD1H i)
   (cond [(nand 
