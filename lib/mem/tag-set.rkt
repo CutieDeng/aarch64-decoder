@@ -140,7 +140,7 @@
     (equal? (bitwise-bit-field i 24 26) #x1)
     (equal? (bitwise-bit-field i 22 24) #x3)
     (equal? (bitwise-bit-field i 21 22) #x0)
-    (equal? (bitwise-bit-field i 12 14) #x1)
+    (equal? (bitwise-bit-field i 12 14) #x3)
     (equal? (bitwise-bit-field i 10 12) #x1)
   ) #f]
   [else (apply SETGPTN (int->SETGPTN/struct i))])
