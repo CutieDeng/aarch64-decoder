@@ -450,3 +450,37 @@
 )
 
 (provide (struct-out LD1SB))
+
+(define int->LD1SW/struct int->LD1SB/struct)
+
+(define (int->LD1SW i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) #x52)
+    (equal? (bitwise-bit-field i 21 25) #x4)
+    (equal? (bitwise-bit-field i 20 21) #x0)
+    (equal? (bitwise-bit-field i 13 16) #x5)
+  ) #f]
+  [else (apply LD1SW (int->LD1SW/struct i))])
+)
+
+(define (LD1SW->int ld1)
+  (match-define (LD1SW dtype imm4 pg rn zt) ld1)
+  (bitwise-ior
+    (arithmetic-shift #x52 25)
+    (arithmetic-shift dtype 21)
+    (arithmetic-shift imm4 16)
+    (arithmetic-shift #x5 13)
+    (arithmetic-shift pg 10)
+    (arithmetic-shift rn 5)
+    zt
+  )
+)
+
+(struct LD1SW (dtype imm4 pg rn zt)
+  #:transparent
+  #:property prop:in-feature '(or FEAT_SVE FEAT_F64MM)
+  #:property prop:into-int LD1SW->int
+  #:property prop:try-from-int int->LD1SW
+)
+
+(provide (struct-out LD1SW))
