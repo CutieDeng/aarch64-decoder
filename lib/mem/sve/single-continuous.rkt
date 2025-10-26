@@ -518,3 +518,46 @@
 )
 
 (provide (struct-out LD1W))
+
+(define (int->ST1B/struct i)
+  (list
+    (bitwise-bit-field i 23 25)
+    (bitwise-bit-field i 21 23)
+    (bitwise-bit-field i 16 20)
+    (bitwise-bit-field i 10 13)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->ST1B i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) #x72)
+    (equal? (bitwise-bit-field i 23 25) #x0)
+    (equal? (bitwise-bit-field i 20 21) #x0)
+    (equal? (bitwise-bit-field i 13 16) #x7)
+  ) #f]
+  [else (apply ST1B (int->ST1B/struct i))])
+)
+
+(define (ST1B->int ld1)
+  (match-define (ST1B msz size imm4 pg rn zt) ld1)
+  (bitwise-ior
+    (arithmetic-shift #x72 25)
+    (arithmetic-shift msz 23)
+    (arithmetic-shift size 21)
+    (arithmetic-shift imm4 16)
+    (arithmetic-shift #x7 13)
+    (arithmetic-shift pg 10)
+    (arithmetic-shift rn 5)
+    zt
+  )
+)
+
+(struct ST1B (msz size imm4 pg rn zt)
+  #:transparent
+  #:property prop:in-feature '(or FEAT_SVE FEAT_SME)
+  #:property prop:into-int ST1B->int
+  #:property prop:try-from-int int->ST1B
+)
+
+(provide (struct-out ST1B))
