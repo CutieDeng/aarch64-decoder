@@ -229,3 +229,39 @@
 )
 
 (provide (struct-out LD1ROH))
+
+(define int->LD1ROW/struct int->LD1ROB/struct)
+
+(define (int->LD1ROW i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) #x52)
+    (equal? (bitwise-bit-field i 23 25) #x2)
+    (equal? (bitwise-bit-field i 21 23) #x1)
+    (equal? (bitwise-bit-field i 20 21) #x0)
+    (equal? (bitwise-bit-field i 13 16) #x1)
+  ) #f]
+  [else (apply LD1ROW (int->LD1ROW/struct i))])
+)
+
+(define (LD1ROW->int ld1)
+  (match-define (LD1ROW msz ssz imm4 pg rn zt) ld1)
+  (bitwise-ior
+    (arithmetic-shift #x52 25)
+    (arithmetic-shift msz 23)
+    (arithmetic-shift ssz 21)
+    (arithmetic-shift imm4 16)
+    (arithmetic-shift #x1 13)
+    (arithmetic-shift pg 10)
+    (arithmetic-shift rn 5)
+    zt
+  )
+)
+
+(struct LD1ROW (msz ssz imm4 pg rn zt)
+  #:transparent
+  #:property prop:in-feature 'FEAT_F64MM
+  #:property prop:into-int LD1ROW->int
+  #:property prop:try-from-int int->LD1ROW
+)
+
+(provide (struct-out LD1ROW))
