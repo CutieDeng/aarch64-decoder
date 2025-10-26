@@ -632,3 +632,48 @@
 )
 
 (provide (struct-out ST1H))
+
+(define (int->ST1W/struct i)
+  (list
+    (bitwise-bit-field i 23 25)
+    (bitwise-bit-field i 21 22)
+    (bitwise-bit-field i 16 20)
+    (bitwise-bit-field i 10 13)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->ST1W i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) #x72)
+    (equal? (bitwise-bit-field i 23 25) #x2)
+    (equal? (bitwise-bit-field i 22 23) #x1)
+    (equal? (bitwise-bit-field i 20 21) #x0)
+    (equal? (bitwise-bit-field i 13 16) #x7)
+  ) #f]
+  [else (apply ST1W (int->ST1W/struct i))])
+)
+
+(define (ST1W->int ld1)
+  (match-define (ST1W msz sz imm4 pg rn zt) ld1)
+  (bitwise-ior
+    (arithmetic-shift #x72 25)
+    (arithmetic-shift msz 23)
+    (arithmetic-shift #x1 22)
+    (arithmetic-shift sz 21)
+    (arithmetic-shift imm4 16)
+    (arithmetic-shift #x7 13)
+    (arithmetic-shift pg 10)
+    (arithmetic-shift rn 5)
+    zt
+  )
+)
+
+(struct ST1W (msz sz imm4 pg rn zt)
+  #:transparent
+  #:property prop:in-feature '(or FEAT_SVE FEAT_SME)
+  #:property prop:into-int ST1W->int
+  #:property prop:try-from-int int->ST1W
+)
+
+(provide (struct-out ST1W))
