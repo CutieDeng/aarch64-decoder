@@ -817,7 +817,7 @@
 
 (provide (struct-out LDFF1B/d))
 
-(define int->LDFF1D/struct int->LDFF1D/struct)
+(define int->LDFF1D/struct int->LDFF1B/b/struct)
 
 (define (int->LDFF1D i)
   (cond [(nand 
