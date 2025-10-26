@@ -700,6 +700,7 @@
   (match-define (LDFF1B/b dtype rm pg rn zt) ld1)
   (bitwise-ior
     (arithmetic-shift #x52 25)
+    (arithmetic-shift dtype 21)
     (arithmetic-shift rm 16)
     (arithmetic-shift #x3 13)
     (arithmetic-shift pg 10)
@@ -732,6 +733,7 @@
   (match-define (LDFF1B/h dtype rm pg rn zt) ld1)
   (bitwise-ior
     (arithmetic-shift #x52 25)
+    (arithmetic-shift dtype 21)
     (arithmetic-shift rm 16)
     (arithmetic-shift #x3 13)
     (arithmetic-shift pg 10)
