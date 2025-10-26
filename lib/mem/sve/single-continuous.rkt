@@ -816,3 +816,36 @@
 )
 
 (provide (struct-out LDFF1B/d))
+
+(define int->LDFF1D/struct int->LDFF1D/struct)
+
+(define (int->LDFF1D i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) #x52)
+    (equal? (bitwise-bit-field i 21 25) #xf)
+    (equal? (bitwise-bit-field i 13 16) #x3)
+  ) #f]
+  [else (apply LDFF1D (int->LDFF1D/struct i))])
+)
+
+(define (LDFF1D->int ld1)
+  (match-define (LDFF1D dtype rm pg rn zt) ld1)
+  (bitwise-ior
+    (arithmetic-shift #x52 25)
+    (arithmetic-shift dtype 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift #x3 13)
+    (arithmetic-shift pg 10)
+    (arithmetic-shift rn 5)
+    zt
+  )
+)
+
+(struct LDFF1D (dtype rm pg rn zt)
+  #:transparent
+  #:property prop:in-feature 'FEAT_SVE
+  #:property prop:into-int LDFF1D->int
+  #:property prop:try-from-int int->LDFF1D
+)
+
+(provide (struct-out LDFF1D))
