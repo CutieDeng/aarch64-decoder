@@ -1049,3 +1049,38 @@
 )
 
 (provide (struct-out LDNF1B))
+
+(define int->LDNF1D/struct int->LD1SB/struct)
+
+(define (int->LDNF1D i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 25 32) #x52)
+    (equal? (bitwise-bit-field i 21 25) #xf)
+    (equal? (bitwise-bit-field i 20 21) #x1)
+    (equal? (bitwise-bit-field i 13 16) #x5)
+  ) #f]
+  [else (apply LDNF1D (int->LDNF1D/struct i))])
+)
+
+(define (LDNF1D->int ld1)
+  (match-define (LDNF1D dtype imm4 pg rn zt) ld1)
+  (bitwise-ior
+    (arithmetic-shift #x52 25)
+    (arithmetic-shift dtype 21)
+    (arithmetic-shift #x1 20)
+    (arithmetic-shift imm4 16)
+    (arithmetic-shift #x5 13)
+    (arithmetic-shift pg 10)
+    (arithmetic-shift rn 5)
+    zt
+  )
+)
+
+(struct LDNF1D (dtype imm4 pg rn zt)
+  #:transparent
+  #:property prop:in-feature 'FEAT_SVE
+  #:property prop:into-int LDNF1D->int
+  #:property prop:try-from-int int->LDNF1D
+)
+
+(provide (struct-out LDNF1D))
