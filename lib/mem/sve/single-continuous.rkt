@@ -1020,7 +1020,7 @@
 (define (int->LDNF1B i)
   (cond [(nand 
     (equal? (bitwise-bit-field i 25 32) #x52)
-    (equal? (bitwise-bit-field i 21 25) #x0)
+    ((or/c #x0 #x1 #x2 #x3) (bitwise-bit-field i 21 25))
     (equal? (bitwise-bit-field i 20 21) #x1)
     (equal? (bitwise-bit-field i 13 16) #x5)
   ) #f]
@@ -1090,7 +1090,7 @@
 (define (int->LDNF1H i)
   (cond [(nand 
     (equal? (bitwise-bit-field i 25 32) #x52)
-    (equal? (bitwise-bit-field i 21 25) #x5)
+    ((or/c #x5 #x6 #x7) (bitwise-bit-field i 21 25))
     (equal? (bitwise-bit-field i 20 21) #x1)
     (equal? (bitwise-bit-field i 13 16) #x5)
   ) #f]
