@@ -92,3 +92,44 @@
 )
 
 (provide (struct-out FMOV/r))
+
+(define (int->FMOV/i/struct i)
+  (list
+    (bitwise-bit-field i 22 24)
+    (bitwise-bit-field i 13 21)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->FMOV/i i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 30 31) #x0)
+    (equal? (bitwise-bit-field i 29 30) #x0)
+    (equal? (bitwise-bit-field i 24 29) #x1e)
+    (equal? (bitwise-bit-field i 21 22) #x1)
+    (equal? (bitwise-bit-field i 10 13) #x4)
+    (equal? (bitwise-bit-field i 5 10) #x0)
+  ) #f]
+  [else (apply FMOV/i (int->FMOV/i/struct i))])
+)
+
+(define (FMOV/i->int f)
+  (match-define (FMOV/i ftype imm8 rd) f)
+  (bitwise-ior
+    (arithmetic-shift #x1e 24)
+    (arithmetic-shift ftype 22)
+    (arithmetic-shift #x1 21)
+    (arithmetic-shift imm8 13)
+    (arithmetic-shift #x4 10)
+    rd
+  )
+)
+
+(struct FMOV/i (ftype imm8 rd)
+  #:transparent
+  #:property prop:in-feature #f
+  #:property prop:into-int FMOV/i->int
+  #:property prop:try-from-int int->FMOV/i
+)
+
+(provide (struct-out FMOV/i))
