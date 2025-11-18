@@ -198,3 +198,49 @@
 )
 
 (provide (struct-out FMUL/e/h/p))
+
+(define (int->FMUL/v/h/struct i)
+  (list
+    (bitwise-bit-field i 30 31)
+    (bitwise-bit-field i 16 21)
+    (bitwise-bit-field i 5 10)
+    (bitwise-bit-field i 0 5))
+)
+
+(define (int->FMUL/v/h i)
+  (cond [(nand 
+    (equal? (bitwise-bit-field i 31 32) #x0)
+    (equal? (bitwise-bit-field i 29 30) #x1)
+    (equal? (bitwise-bit-field i 24 29) #xe)
+    (equal? (bitwise-bit-field i 23 24) #x0)
+    (equal? (bitwise-bit-field i 21 23) #x2)
+    (equal? (bitwise-bit-field i 14 16) #x0)
+    (equal? (bitwise-bit-field i 11 14) #x3)
+    (equal? (bitwise-bit-field i 10 11) #x1)
+  ) #f]
+  [else (apply FMUL/v/h (int->FMUL/v/h/struct i))])
+)
+
+(define (FMUL/v/h->int f)
+  (match-define (FMUL/v/h q rm rn rd) f)
+  (bitwise-ior
+    (arithmetic-shift q 30)
+    (arithmetic-shift #x1 29)
+    (arithmetic-shift #xe 24)
+    (arithmetic-shift #x2 21)
+    (arithmetic-shift rm 16)
+    (arithmetic-shift #x3 11)
+    (arithmetic-shift #x1 10)
+    (arithmetic-shift rn 5)
+    rd
+  )
+)
+
+(struct FMUL/v/h (q rm rn rd)
+  #:transparent
+  #:property prop:in-feature 'FEAT_FP16
+  #:property prop:into-int FMUL/v/h->int
+  #:property prop:try-from-int int->FMUL/v/h
+)
+
+(provide (struct-out FMUL/v/h))
